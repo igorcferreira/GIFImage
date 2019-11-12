@@ -10,8 +10,12 @@ import Foundation
 
 public struct FileSystemImageCache: ImageCache {
     
+    private var cacheDirectory: String? {
+        return NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
+    }
+    
     private var rootDir: URL? {
-        guard let basePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first else {
+        guard let basePath = cacheDirectory  else {
             return nil
         }
         return URL(fileURLWithPath: basePath, isDirectory: true)
@@ -48,7 +52,7 @@ public struct FileSystemImageCache: ImageCache {
             try saveData.write(to: fullPath, options: [.atomicWrite, .completeFileProtection])
             #endif
         } catch {
-            print("Error saving cache: \(error.localizedDescription)")
+            print("JIFView; Error saving cache: \(error.localizedDescription)")
         }
     }
 }
