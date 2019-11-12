@@ -29,7 +29,7 @@ public typealias UIImage = NSImage
     private let loop: Bool
     private let source: Source
     private let dataLoader = DataLoader()
-    private let viewQueue = DispatchQueue(label: "SwiftUI.View.JIFView.\(UUID().uuidString)", qos: .background)
+    private let viewQueue = DispatchQueue(label: "SwiftUI.View.JIFView", qos: .background)
     
     
     /// JIFView is a view able to load and display GIF either from an URL, or in-memory data
@@ -40,7 +40,7 @@ public typealias UIImage = NSImage
     ///   - loop: Indication if the GIF should return the first frame at end or not
     public init(source: Source,
                 placeholder: UIImage? = nil,
-                frameRate: TimeInterval = 0.05,
+                frameRate: TimeInterval = 0.03,
                 loop: Bool = true) {
         self.placeholder = placeholder ?? UIImage()
         self.loop = loop
@@ -73,7 +73,8 @@ public typealias UIImage = NSImage
         
         subscriber = basePublisher.mapToGIFStream(frameRate: frameRate,
                                                          loop: loop,
-                                                         scheduleOn: DispatchQueue(label: UUID().uuidString, qos: .userInteractive))
+                                                         scheduleOn: viewQueue)
+            .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
     }
 }

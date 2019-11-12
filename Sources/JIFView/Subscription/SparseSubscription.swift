@@ -17,13 +17,11 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     private var subscriber: SubscriberType?
     private var elements: [Stream.Output] = []
     private var cancellable: Cancellable? = nil
-    private var dispatcher: Cancellable? = nil
     private let upstream: Stream
     private let frameRate: Int
     private let loop: Bool
     private let scheduler: S
     private var frameIndex: Int = 0
-    private var completed: Bool = false
     
     init(subscriber: SubscriberType, upstream: Stream, frameRate: TimeInterval, loop: Bool, scheduler: S) {
         self.scheduler = scheduler
@@ -34,46 +32,31 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     }
     
     func request(_ demand: Subscribers.Demand) {
-        completed = false
-        clearState()
-        cancellable = upstream.sink(receiveCompletion: { [weak self] _ in
-            self?.completed = true
-        }, receiveValue: { [weak self] (input) in
-            self?.append(input: input)
+        cancellable = upstream.sink(receiveCompletion: { _ in },
+                                    receiveValue: { [weak self] (input) in
+                                        self?.append(input: input)
         })
     }
     
     private func append(input: Stream.Output) {
-        //This strategy of previously empty
-        //is in place to avoid doing .count on all inputs
-        let previouslyEmpty = elements.isEmpty
         elements.append(input)
-        if previouslyEmpty {
-            self.startAnimation()
-        }
-    }
-    
-    private func startAnimation() {
-        let type = DispatchQueue.SchedulerTimeType(DispatchTime.now())
-        let tolerance = DispatchQueue.SchedulerTimeType.Stride(DispatchTimeInterval.milliseconds(0))
-        let interval = DispatchQueue.SchedulerTimeType.Stride(DispatchTimeInterval.milliseconds(frameRate))
-        dispatcher = scheduler.schedule(after: type, interval: interval, tolerance: tolerance) { [weak self] in
-            self?.trigger()
-        }
-    }
-    
-    private func finishOperation() {
-        if loop {
-            frameIndex = 0
-        } else {
-            closeAnimation()
-            subscriber?.receive(completion: .finished)
+        if elements.count == 1 {
+            trigger()
         }
     }
     
     private func trigger() {
+        
+        defer {
+            let timeInterval = DispatchTimeInterval.milliseconds(frameRate)
+            let type = DispatchQueue.SchedulerTimeType(DispatchTime.now() + timeInterval)
+            scheduler.schedule(after: type) { [weak self] in
+                self?.trigger()
+            }
+        }
+        
         guard frameIndex < elements.count else {
-            if completed { finishOperation() }
+            if loop { frameIndex = 0 }
             return
         }
         
@@ -82,23 +65,9 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
         frameIndex += 1
     }
     
-    private func closeAnimation() {
-        dispatcher?.cancel()
-        dispatcher = nil
-    }
-    
-    private func closeStream() {
+    func cancel() {
         cancellable?.cancel()
         cancellable = nil
-    }
-    
-    private func clearState() {
-        closeAnimation()
-        closeStream()
-    }
-    
-    func cancel() {
-        clearState()
         subscriber = nil
     }
 }
