@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "JIFView",
     platforms: [
-        .iOS(.v13), .tvOS(.v13)
+        .iOS(.v13), .tvOS(.v13), .macOS(.v10_15)
     ],
     products: [
         .library(
