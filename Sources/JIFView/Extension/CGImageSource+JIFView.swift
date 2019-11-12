@@ -6,11 +6,16 @@
 //  Copyright © 2019 Future Workshops. All rights reserved.
 //
 
-#if canImport(UIKit) && canImport(Combine)
-import SwiftUI
-import UIKit
+#if canImport(Combine)
 import Combine
 
+#if canImport(UIKit)
+import UIKit
+#else
+import AppKit
+#endif
+
+@available(iOS 13, OSX 10.15, *)
 extension CGImageSource {
     static func getImages(_ source: CGImageSource) -> AnyPublisher<CGImage, Never> {
         let count = CGImageSourceGetCount(source)

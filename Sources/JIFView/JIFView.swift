@@ -5,11 +5,18 @@
 //  Created by Igor Ferreira on 11/11/2019.
 //  Copyright © 2019 Future Workshops. All rights reserved.
 //
-#if canImport(UIKit) && canImport(Combine)
+#if canImport(SwiftUI) && canImport(Combine)
 import SwiftUI
-import UIKit
 import Combine
 
+#if canImport(UIKit)
+import UIKit
+#else
+import AppKit
+public typealias UIImage = NSImage
+#endif
+
+@available(iOS 13, OSX 10.15, *)
 public struct JIFView: View {
     
     @State var image: UIImage? = nil
@@ -33,11 +40,11 @@ public struct JIFView: View {
         self.source = source
     }
     
-    private var imageView: some View {
+    private var imageView: Image {
         if let image = image {
-            return Image(uiImage: image)
+            return Image.build(with: image)
         } else {
-            return Image(uiImage: placeholder)
+            return Image.build(with: placeholder)
         }
     }
     
@@ -64,6 +71,7 @@ public struct JIFView: View {
     }
 }
 
+@available(iOS 13, OSX 10.15, *)
 struct JIFView_Preview: PreviewProvider {
     
     static var source: Source {
