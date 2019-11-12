@@ -17,6 +17,7 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     private var subscriber: SubscriberType?
     private var elements: [Stream.Output] = []
     private var cancellable: Cancellable? = nil
+    private var dispatcher: Cancellable? = nil
     private let upstream: Stream
     private let frameRate: Int
     private let loop: Bool
@@ -41,20 +42,16 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     private func append(input: Stream.Output) {
         elements.append(input)
         if elements.count == 1 {
-            trigger()
+            let type = DispatchQueue.SchedulerTimeType(DispatchTime.now())
+            let tolerance = DispatchQueue.SchedulerTimeType.Stride(DispatchTimeInterval.milliseconds(0))
+            let interval = DispatchQueue.SchedulerTimeType.Stride(DispatchTimeInterval.milliseconds(frameRate))
+            dispatcher = scheduler.schedule(after: type, interval: interval, tolerance: tolerance) { [weak self] in
+                self?.trigger()
+            }
         }
     }
     
     private func trigger() {
-        
-        defer {
-            let timeInterval = DispatchTimeInterval.milliseconds(frameRate)
-            let type = DispatchQueue.SchedulerTimeType(DispatchTime.now() + timeInterval)
-            scheduler.schedule(after: type) { [weak self] in
-                self?.trigger()
-            }
-        }
-        
         guard frameIndex < elements.count else {
             if loop { frameIndex = 0 }
             return
