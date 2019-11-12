@@ -15,9 +15,9 @@ struct DataLoader {
     func buildDataStream(for source: Source) -> AnyPublisher<Data, Never> {
         switch source {
         case .local(let data):
-            return self.buildLocalDataStream(for: data)
+            return buildLocalDataStream(for: data)
         case .remote(let url, let session, let cache):
-            return self.buildRemoteDataStream(for: url, session: session, cache: cache)
+            return buildRemoteDataStream(for: url, session: session, cache: cache)
         }
     }
     

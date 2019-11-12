@@ -14,6 +14,8 @@ import Foundation
 final class SparseSubscription<SubscriberType: Subscriber, Stream: Publisher, S: Scheduler>: Subscription
 where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Failure, S.SchedulerTimeType == DispatchQueue.SchedulerTimeType {
     
+    private let TimeIntervalMillisecondsScale = 1_000.0
+    
     private var subscriber: SubscriberType?
     private var elements: [Stream.Output] = []
     private var cancellable: Cancellable? = nil
@@ -30,7 +32,7 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
         self.scheduler = scheduler
         self.subscriber = subscriber
         self.upstream = upstream
-        self.frameRate = Int(frameRate * 1000.0)
+        self.frameRate = Int(frameRate * TimeIntervalMillisecondsScale)
         self.loop = loop
     }
     
@@ -99,9 +101,15 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
         cancellable = nil
     }
     
+    private func resetBuffer() {
+        elements.removeAll()
+        frameIndex = 0
+    }
+    
     private func clearState() {
         closeAnimation()
         closeStream()
+        resetBuffer()
     }
     
     func cancel() {

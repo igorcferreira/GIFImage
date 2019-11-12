@@ -9,10 +9,7 @@
 import SwiftUI
 import Combine
 
-#if canImport(UIKit)
-import UIKit
-#else
-import AppKit
+#if canImport(AppKit)
 public typealias UIImage = NSImage
 #endif
 
@@ -49,17 +46,18 @@ public typealias UIImage = NSImage
     }
     
     private var imageView: some View {
+        let view: Image
         if let image = image {
-            return Image.build(with: image)
+            view = Image(uiImage: image)
         } else {
-            return Image.build(with: placeholder)
+            view = Image(uiImage: placeholder)
         }
+        return view.resizable()
+        .aspectRatio(contentMode: ContentMode.fit)
     }
     
     public var body: some View {
-        imageView.onAppear(perform: {
-            self.load()
-        })
+        imageView.onAppear(perform: self.load)
     }
     
     private func load() {
@@ -71,10 +69,13 @@ public typealias UIImage = NSImage
         let basePublisher = self.dataLoader.buildDataStream(for: source)
         .subscribe(on: viewQueue)
         
-        subscriber = basePublisher.mapToGIFStream(frameRate: frameRate,
+        let scheduler = DispatchQueue(label: UUID().uuidString,
+                                      qos: .userInteractive)
+        let viewModel = basePublisher.mapToGIFStream(frameRate: frameRate,
                                                          loop: loop,
-                                                         scheduleOn: DispatchQueue(label: UUID().uuidString, qos: .userInteractive))
-            .assign(to: \.image, on: self)
+                                                         scheduleOn: scheduler)
+        
+        subscriber = viewModel.assign(to: \.image, on: self)
     }
 }
 
