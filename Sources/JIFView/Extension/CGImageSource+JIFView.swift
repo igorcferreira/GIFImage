@@ -6,20 +6,16 @@
 //  Copyright © 2019 Igor Ferreira. All rights reserved.
 //
 
-#if canImport(Combine)
+#if canImport(Combine) && canImport(ImageIO)
 import Combine
-
-#if canImport(UIKit)
-import UIKit
-#else
-import AppKit
-#endif
+import ImageIO
 
 @available(iOS 13, OSX 10.15, *)
 extension CGImageSource {
     static func getImages(_ source: CGImageSource) -> AnyPublisher<CGImage, Never> {
         let count = CGImageSourceGetCount(source)
-        return (0..<count).publisher.compactMap({ (index) -> CGImage? in
+        let range = (0..<count)
+        return range.publisher.compactMap({ (index) -> CGImage? in
             CGImageSourceCreateImageAtIndex(source, index, nil)
         }).eraseToAnyPublisher()
     }

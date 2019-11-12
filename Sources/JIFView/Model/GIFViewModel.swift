@@ -21,7 +21,7 @@ extension Publisher where Output == Data, Failure == Never {
         where S.SchedulerTimeType == DispatchQueue.SchedulerTimeType {
         return self.compactMap({ CGImageSourceCreateWithData($0 as CFData, nil) })
             .flatMap(CGImageSource.getImages(_:))
-            .map(UIImage.build(with:))
+            .map(UIImage.init(cgImage:))
             .sparsed(frameRate: frameRate, loop: loop, scheduler: scheduleOn)
             .eraseToAnyPublisher()
     }
