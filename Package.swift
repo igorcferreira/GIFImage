@@ -17,5 +17,6 @@ let package = Package(
         .target(
             name: "JIFView",
             path: "Sources")
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )
