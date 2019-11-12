@@ -73,7 +73,7 @@ public typealias UIImage = NSImage
         
         subscriber = basePublisher.mapToGIFStream(frameRate: frameRate,
                                                          loop: loop,
-                                                         scheduleOn: viewQueue)
+                                                         scheduleOn: DispatchQueue(label: UUID().uuidString, qos: .userInteractive))
             .assign(to: \.image, on: self)
     }
 }
