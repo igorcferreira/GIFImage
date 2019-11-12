@@ -48,7 +48,7 @@ public typealias UIImage = NSImage
         self.source = source
     }
     
-    private var imageView: Image {
+    private var imageView: some View {
         if let image = image {
             return Image.build(with: image)
         } else {

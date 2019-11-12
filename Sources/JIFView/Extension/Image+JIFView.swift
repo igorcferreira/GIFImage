@@ -12,11 +12,15 @@ import SwiftUI
 
 @available(iOS 13, OSX 10.15, *)
 extension Image {
-    static func build(with image: UIImage) -> Image {
+    static func build(with image: UIImage) -> some View {
         #if canImport(UIKit)
         return Image(uiImage: image)
+            .resizable()
+            .aspectRatio(contentMode: ContentMode.fit)
         #else
         return Image(nsImage: image)
+            .resizable()
+            .aspectRatio(contentMode: ContentMode.fit)
         #endif
     }
 }
