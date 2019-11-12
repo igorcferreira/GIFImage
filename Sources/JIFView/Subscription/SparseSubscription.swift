@@ -24,6 +24,7 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     private let scheduler: S
     private var frameIndex: Int = 0
     private var completed: Bool = false
+    private let subscriptionQueue = DispatchQueue(label: "Combine.SparseSubscription.\(UUID().uuidString)", qos: .userInteractive)
     
     init(subscriber: SubscriberType, upstream: Stream, frameRate: TimeInterval, loop: Bool, scheduler: S) {
         self.scheduler = scheduler
@@ -44,12 +45,15 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     }
     
     private func append(input: Stream.Output) {
-        //This strategy of previously empty
-        //is in place to avoid doing .count on all inputs
-        let previouslyEmpty = elements.isEmpty
-        elements.append(input)
-        if previouslyEmpty {
-            self.startAnimation()
+        subscriptionQueue.sync { [weak self] in
+            guard let self = self else { return }
+            //This strategy of previously empty
+            //is in place to avoid doing .count on all inputs
+            let previouslyEmpty = self.elements.isEmpty
+            self.elements.append(input)
+            if previouslyEmpty {
+                self.startAnimation()
+            }
         }
     }
     
@@ -58,7 +62,9 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
         let tolerance = DispatchQueue.SchedulerTimeType.Stride(DispatchTimeInterval.milliseconds(0))
         let interval = DispatchQueue.SchedulerTimeType.Stride(DispatchTimeInterval.milliseconds(frameRate))
         dispatcher = scheduler.schedule(after: type, interval: interval, tolerance: tolerance) { [weak self] in
-            self?.trigger()
+            self?.subscriptionQueue.sync { [weak self] in
+                self?.trigger()
+            }
         }
     }
     
@@ -72,14 +78,15 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     }
     
     private func trigger() {
-        guard frameIndex < elements.count else {
+        let index = frameIndex
+        
+        guard index < elements.count else {
             if completed { finishOperation() }
             return
         }
-        
-        let frame = elements[frameIndex]
+        frameIndex = index + 1
+        let frame = elements[index]
         _ = subscriber?.receive(frame)
-        frameIndex += 1
     }
     
     private func closeAnimation() {
