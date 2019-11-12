@@ -65,7 +65,7 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     private func finishOperation() {
         if loop {
             frameIndex = 0
-        } else if completed {
+        } else {
             closeAnimation()
             subscriber?.receive(completion: .finished)
         }
