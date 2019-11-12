@@ -40,7 +40,7 @@ public typealias UIImage = NSImage
     ///   - loop: Indication if the GIF should return the first frame at end or not
     public init(source: Source,
                 placeholder: UIImage? = nil,
-                frameRate: TimeInterval = 0.03,
+                frameRate: TimeInterval = 0.05,
                 loop: Bool = true) {
         self.placeholder = placeholder ?? UIImage()
         self.loop = loop
