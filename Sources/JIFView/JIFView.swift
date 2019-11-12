@@ -20,6 +20,7 @@ public struct JIFView: View {
     private let frameRate: TimeInterval
     private let loop: Bool
     private let source: Source
+    private let dataLoader = DataLoader()
     private let viewQueue = DispatchQueue(label: "SwiftUI.View.JIFView", qos: .background)
     
     public init(source: Source,
@@ -48,35 +49,16 @@ public struct JIFView: View {
     
     private func load() {
         
-        guard case .remote(let url, let session, let cache) = source else {
+        guard subscriber == nil else {
             return
         }
         
-        guard subscriber == nil, let id = url.pathComponents.last ?? url.host else {
-            return
-        }
-        
-        let cachePublisher = Just(cache?.load(id: id))
-            .tryMap({ try $0.tryUnwrap() })
-        
-        let remotePublisher = session
-            .dataTaskPublisher(for: url)
-            .map({ $0.data })
-            .handleEvents(receiveOutput: {
-                cache?.save(data: $0, withId: id)
-            })
-        
-        let basePublisher = cachePublisher.catch({ _ in remotePublisher })
+        let basePublisher = self.dataLoader.buildDataStream(for: source)
         .subscribe(on: viewQueue)
         
-        let wrapped = basePublisher
-        .replaceError(with: placeholder.pngData() ?? Data())
-        
-        subscriber = wrapped
-            .compactMap({ CGImageSourceCreateWithData($0 as CFData, nil) })
-            .flatMap(CGImageSource.getImages(_:))
-            .map(UIImage.init(cgImage:))
-            .sparsed(frameRate: frameRate, loop: loop, scheduler: viewQueue)
+        subscriber = basePublisher.mapToGIFStream(frameRate: frameRate,
+                                                         loop: loop,
+                                                         scheduleOn: viewQueue)
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
     }
