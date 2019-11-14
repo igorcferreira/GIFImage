@@ -27,7 +27,7 @@ struct DataLoader {
     
     private func buildRemoteDataStream(for url: URL, session: URLSession, cache: ImageCache?) -> AnyPublisher<Data, Never> {
         
-        let id = url.pathComponents.last ?? url.host ?? UUID().uuidString
+        let id = "\(url.host ?? "")_\(url.path)".replacingOccurrences(of: "/", with: "_")
         
         let cachePublisher = Just(cache?.load(id: id))
             .tryMap({ try $0.tryUnwrap() })
