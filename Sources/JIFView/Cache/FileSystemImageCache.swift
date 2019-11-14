@@ -10,15 +10,14 @@ import Foundation
 
 public struct FileSystemImageCache: ImageCache {
     
-    private var cacheDirectory: String? {
-        return NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first
-    }
-    
-    private var rootDir: URL? {
-        guard let basePath = cacheDirectory  else {
-            return nil
+    private let rootDir: URL?
+
+    init(appGroup: String? = nil, fileManager: FileManager = .default) {
+        if let appGroup = appGroup {
+            self.rootDir = fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+        } else {
+            self.rootDir = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
         }
-        return URL(fileURLWithPath: basePath, isDirectory: true)
     }
     
     public func load(id: String) -> Data? {
