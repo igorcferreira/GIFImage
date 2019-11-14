@@ -12,7 +12,7 @@ public struct FileSystemImageCache: ImageCache {
     
     private let rootDir: URL?
 
-    init(appGroup: String? = nil, fileManager: FileManager = .default) {
+    public init(appGroup: String? = nil, fileManager: FileManager = .default) {
         if let appGroup = appGroup {
             self.rootDir = fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
         } else {
