@@ -57,7 +57,14 @@ public typealias UIImage = NSImage
     }
     
     public var body: some View {
-        imageView.onAppear(perform: self.load)
+        imageView
+            .onAppear(perform: self.load)
+            .onDisappear(perform: self.unload)
+    }
+    
+    private func unload() {
+        self.subscriber?.cancel()
+        self.subscriber = nil
     }
     
     private func load() {
