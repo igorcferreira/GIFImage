@@ -55,8 +55,8 @@ struct SearchResult: Codable {
 }
 
 extension String {
-    var giphyQuery: String {
-        return "https://api.giphy.com/v1/gifs/search?q=\(self)&api_key=UMwJChMJqC1maPR8A72tvksbpPPXKFhA"
+    func giphyQuery(key: String) -> String {
+        return "https://api.giphy.com/v1/gifs/search?q=\(self)&api_key=\(key)"
     }
 }
 
@@ -64,11 +64,12 @@ struct ContentView: View {
     
     @State var items = [GIFRow]()
     @State var input: String = "LLama"
+    @State var key: String = ""
     @State var cancellable: Cancellable? = nil
     
     func search() {
         
-        guard let url = URL(string: input.giphyQuery) else {
+        guard let url = URL(string: input.giphyQuery(key: key)) else {
             return
         }
         
@@ -87,6 +88,8 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
+            TextField("Giphy Key", text: $key, onCommit: self.search)
+                .padding(10.0)
             TextField("Search", text: $input, onCommit: self.search)
                 .padding(10.0)
             
