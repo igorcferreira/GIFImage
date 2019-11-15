@@ -26,7 +26,7 @@ public typealias UIImage = NSImage
     private let loop: Bool
     private let source: Source
     private let dataLoader = DataLoader()
-    private let viewQueue = DispatchQueue(label: "SwiftUI.View.JIFView.\(UUID().uuidString)", qos: .background)
+    private let viewQueue = DispatchQueue(label: "SwiftUI.View.JIFView.\(UUID().uuidString)", qos: .userInteractive)
     
     
     /// JIFView is a view able to load and display GIF either from an URL, or in-memory data
