@@ -17,11 +17,11 @@ import AppKit
 
 @available(iOS 13, OSX 10.15, *)
 extension Publisher where Output == Data, Failure == Never {
-    func mapToGIFStream<S: Scheduler>(frameRate: TimeInterval, loop: Bool, scheduleOn: S) -> AnyPublisher<UIImage?, Never>
+    func mapToGIFStream<S: Scheduler>(frameRate: TimeInterval, loop: Bool, scheduleOn: S) -> AnyPublisher<RawImage?, Never>
         where S.SchedulerTimeType == DispatchQueue.SchedulerTimeType {
         return self.compactMap({ CGImageSourceCreateWithData($0 as CFData, nil) })
             .flatMap(CGImageSource.getImages(_:))
-            .map(UIImage.init(cgImage:))
+            .map(RawImage.init(cgImage:))
             .sparsed(frameRate: frameRate, loop: loop, scheduler: scheduleOn)
             .eraseToAnyPublisher()
     }

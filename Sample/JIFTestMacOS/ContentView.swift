@@ -98,7 +98,7 @@ struct ContentView: View {
                     JIFView(source: .remote(url: item.gif.fullURL,
                                     session: .shared,
                                     cache: FileSystemImageCache()),
-                            placeholder: UIImage(named: "placeholder"))
+                            placeholder: RawImage(named: "placeholder"))
                         .frame(idealWidth: geometry.size.width,
                                idealHeight: item.gif.size.adapted(for: geometry.size).height,
                                alignment: .center)

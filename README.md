@@ -31,7 +31,7 @@ The view can be configured with a placeholder image placed while the GIF is bein
 
 ```swift
 JIFView.init(source: Source,
-	placeholder: UIImage? = nil,
+	placeholder: RawImage? = nil,
 	frameRate: TimeInterval = 0.03,
 	loop: Bool = true)
 ```
