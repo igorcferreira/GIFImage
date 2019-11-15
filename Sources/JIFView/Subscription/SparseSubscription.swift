@@ -107,6 +107,10 @@ where SubscriberType.Input == Stream.Output, SubscriberType.Failure == Stream.Fa
     }
     
     private func clearState() {
+        guard subscriber != nil, !elements.isEmpty else {
+            return
+        }
+        
         closeAnimation()
         closeStream()
         resetBuffer()

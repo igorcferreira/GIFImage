@@ -57,7 +57,14 @@ public typealias UIImage = NSImage
     }
     
     public var body: some View {
-        imageView.onAppear(perform: self.load)
+        imageView
+            .onAppear(perform: load)
+            .onDisappear(perform: unload)
+    }
+    
+    private func unload() {
+        subscriber?.cancel()
+        subscriber = nil
     }
     
     private func load() {
@@ -65,31 +72,30 @@ public typealias UIImage = NSImage
         guard subscriber == nil else {
             return
         }
-        
-        let basePublisher = self.dataLoader.buildDataStream(for: source)
-        .subscribe(on: viewQueue)
-        
+
         let scheduler = DispatchQueue(label: UUID().uuidString,
-                                      qos: .userInteractive)
-        let viewModel = basePublisher.mapToGIFStream(frameRate: frameRate,
-                                                         loop: loop,
-                                                         scheduleOn: scheduler)
+        qos: .userInteractive)
         
-        subscriber = viewModel.assign(to: \.image, on: self)
+        let publisher = dataLoader
+            .buildDataStream(for: source)
+            .subscribe(on: viewQueue)
+            .mapToGIFStream(frameRate: frameRate,
+                            loop: loop,
+                            scheduleOn: scheduler)
+            .receive(on: DispatchQueue.main)
+        
+        subscriber = publisher.assign(to: \.image, on: self)
     }
 }
 
 @available(iOS 13, OSX 10.15, *)
 struct JIFView_Preview: PreviewProvider {
     
-    static var source: Source {
-        return .remote(url: URL(string: "https://images.squarespace-cdn.com/content/v1/50ff1acce4b047a6c7999c73/1566186157381-T7WSLE7DPT8DG1VMWDBK/ke17ZwdGBToddI8pDm48kLxnK526YWAH1qleWz-y7AFZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVH-2yKxPTYak0SCdSGNKw8A2bnS_B4YtvNSBisDMT-TGt1lH3P2bFZvTItROhWrBJ0/Llama_Run_Instagram_.gif")!,
-                       session: .shared,
-                       cache: nil)
-    }
-    
     static var previews: some View {
-        JIFView(source: source)
+        JIFView(source: .remote(url: URL(string: "https://images.squarespace-cdn.com/content/v1/50ff1acce4b047a6c7999c73/1566186157381-T7WSLE7DPT8DG1VMWDBK/ke17ZwdGBToddI8pDm48kLxnK526YWAH1qleWz-y7AFZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVH-2yKxPTYak0SCdSGNKw8A2bnS_B4YtvNSBisDMT-TGt1lH3P2bFZvTItROhWrBJ0/Llama_Run_Instagram_.gif")!,
+                                session: .shared,
+                                cache: FileSystemImageCache())
+        )
     }
 }
 #endif

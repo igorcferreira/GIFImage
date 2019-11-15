@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "JIFView",
+        "repositoryURL": "git@github.com:igorcferreira/JIFView.git",
+        "state": {
+          "branch": "master",
+          "revision": "034937058285e2e5a073ccb9c31b0f62b9334aea",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
