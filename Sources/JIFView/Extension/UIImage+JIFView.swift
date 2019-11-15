@@ -6,7 +6,7 @@
 //  Copyright © 2019 Igor Ferreira. All rights reserved.
 //
 
-#if canImport(AppKit)
+#if canImport(AppKit) && !canImport(SwiftUI)
 import Foundation
 import AppKit
 

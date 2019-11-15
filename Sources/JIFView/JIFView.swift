@@ -9,7 +9,7 @@
 import SwiftUI
 import Combine
 
-#if canImport(AppKit)
+#if canImport(AppKit) && !canImport(SwiftUI)
 public typealias UIImage = NSImage
 #endif
 
