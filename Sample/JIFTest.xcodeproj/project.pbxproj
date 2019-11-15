@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7806BF28237F662D0094A041 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806BF27237F662D0094A041 /* AppDelegate.swift */; };
+		7806BF2A237F662D0094A041 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806BF29237F662D0094A041 /* ContentView.swift */; };
+		7806BF2C237F662E0094A041 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7806BF2B237F662E0094A041 /* Assets.xcassets */; };
+		7806BF2F237F662E0094A041 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7806BF2E237F662E0094A041 /* Preview Assets.xcassets */; };
+		7806BF32237F662E0094A041 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7806BF30237F662E0094A041 /* Main.storyboard */; };
+		7806BF39237F66430094A041 /* JIFView in Frameworks */ = {isa = PBXBuildFile; productRef = 7806BF38237F66430094A041 /* JIFView */; };
 		781D8354237A54CD00FE2B66 /* llama.gif in Resources */ = {isa = PBXBuildFile; fileRef = 781D8353237A54CD00FE2B66 /* llama.gif */; };
 		78945E17237E13D000842B44 /* LocalFileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78945E16237E13D000842B44 /* LocalFileCache.swift */; };
 		78A4EBE4237658FA00F9A318 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4EBE3237658FA00F9A318 /* AppDelegate.swift */; };
@@ -19,6 +25,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7806BF06237F65180094A041 /* JIFTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JIFTest.entitlements; sourceTree = "<group>"; };
+		7806BF25237F662D0094A041 /* JIFTestMacOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JIFTestMacOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7806BF27237F662D0094A041 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7806BF29237F662D0094A041 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7806BF2B237F662E0094A041 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7806BF2E237F662E0094A041 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7806BF31237F662E0094A041 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7806BF33237F662E0094A041 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7806BF34237F662E0094A041 /* JIFTestMacOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JIFTestMacOS.entitlements; sourceTree = "<group>"; };
 		781D8353237A54CD00FE2B66 /* llama.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = llama.gif; sourceTree = "<group>"; };
 		78945E16237E13D000842B44 /* LocalFileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileCache.swift; sourceTree = "<group>"; };
 		78A4EBE0237658FA00F9A318 /* JIFTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JIFTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -32,6 +47,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7806BF22237F662D0094A041 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7806BF39237F66430094A041 /* JIFView in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		78A4EBDD237658FA00F9A318 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -43,11 +66,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7806BF1E237F65A70094A041 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7806BF26237F662D0094A041 /* JIFTestMacOS */ = {
+			isa = PBXGroup;
+			children = (
+				7806BF27237F662D0094A041 /* AppDelegate.swift */,
+				7806BF29237F662D0094A041 /* ContentView.swift */,
+				7806BF2B237F662E0094A041 /* Assets.xcassets */,
+				7806BF30237F662E0094A041 /* Main.storyboard */,
+				7806BF33237F662E0094A041 /* Info.plist */,
+				7806BF34237F662E0094A041 /* JIFTestMacOS.entitlements */,
+				7806BF2D237F662E0094A041 /* Preview Content */,
+			);
+			path = JIFTestMacOS;
+			sourceTree = "<group>";
+		};
+		7806BF2D237F662E0094A041 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				7806BF2E237F662E0094A041 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		78A4EBD7237658F900F9A318 = {
 			isa = PBXGroup;
 			children = (
 				78A4EBE2237658FA00F9A318 /* JIFTest */,
+				7806BF26237F662D0094A041 /* JIFTestMacOS */,
 				78A4EBE1237658FA00F9A318 /* Products */,
+				7806BF1E237F65A70094A041 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -55,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				78A4EBE0237658FA00F9A318 /* JIFTest.app */,
+				7806BF25237F662D0094A041 /* JIFTestMacOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -62,6 +117,7 @@
 		78A4EBE2237658FA00F9A318 /* JIFTest */ = {
 			isa = PBXGroup;
 			children = (
+				7806BF06237F65180094A041 /* JIFTest.entitlements */,
 				781D8353237A54CD00FE2B66 /* llama.gif */,
 				78A4EBE3237658FA00F9A318 /* AppDelegate.swift */,
 				78A4EBE5237658FA00F9A318 /* SceneDelegate.swift */,
@@ -86,6 +142,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7806BF24237F662D0094A041 /* JIFTestMacOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7806BF35237F662E0094A041 /* Build configuration list for PBXNativeTarget "JIFTestMacOS" */;
+			buildPhases = (
+				7806BF21237F662D0094A041 /* Sources */,
+				7806BF22237F662D0094A041 /* Frameworks */,
+				7806BF23237F662D0094A041 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JIFTestMacOS;
+			packageProductDependencies = (
+				7806BF38237F66430094A041 /* JIFView */,
+			);
+			productName = JIFTestMacOS;
+			productReference = 7806BF25237F662D0094A041 /* JIFTestMacOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 		78A4EBDF237658FA00F9A318 /* JIFTest */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 78A4EBF4237658FB00F9A318 /* Build configuration list for PBXNativeTarget "JIFTest" */;
@@ -116,6 +192,9 @@
 				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Future Workshops";
 				TargetAttributes = {
+					7806BF24237F662D0094A041 = {
+						CreatedOnToolsVersion = 11.2.1;
+					};
 					78A4EBDF237658FA00F9A318 = {
 						CreatedOnToolsVersion = 11.2.1;
 					};
@@ -138,11 +217,22 @@
 			projectRoot = "";
 			targets = (
 				78A4EBDF237658FA00F9A318 /* JIFTest */,
+				7806BF24237F662D0094A041 /* JIFTestMacOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7806BF23237F662D0094A041 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7806BF32237F662E0094A041 /* Main.storyboard in Resources */,
+				7806BF2F237F662E0094A041 /* Preview Assets.xcassets in Resources */,
+				7806BF2C237F662E0094A041 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		78A4EBDE237658FA00F9A318 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -157,6 +247,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7806BF21237F662D0094A041 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7806BF2A237F662D0094A041 /* ContentView.swift in Sources */,
+				7806BF28237F662D0094A041 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		78A4EBDC237658FA00F9A318 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -171,6 +270,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		7806BF30237F662E0094A041 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7806BF31237F662E0094A041 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		78A4EBEE237658FB00F9A318 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -182,6 +289,54 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		7806BF36237F662E0094A041 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = JIFTestMacOS/JIFTestMacOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"JIFTestMacOS/Preview Content\"";
+				DEVELOPMENT_TEAM = W67FJT8JS4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = JIFTestMacOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igorcferreira.macos.JIFTestMacOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		7806BF37237F662E0094A041 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = JIFTestMacOS/JIFTestMacOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"JIFTestMacOS/Preview Content\"";
+				DEVELOPMENT_TEAM = W67FJT8JS4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = JIFTestMacOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igorcferreira.macos.JIFTestMacOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		78A4EBF2237658FB00F9A318 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -300,19 +455,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = JIFTest/JIFTest.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"JIFTest/Preview Content\"";
-				DEVELOPMENT_TEAM = BQHMJ2C6RL;
+				DEVELOPMENT_TEAM = W67FJT8JS4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = JIFTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.futureworkshops.JIFTest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igorcferreira.JIFVIew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "FW-Ent-All-Development";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -322,19 +482,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = JIFTest/JIFTest.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"JIFTest/Preview Content\"";
-				DEVELOPMENT_TEAM = BQHMJ2C6RL;
+				DEVELOPMENT_TEAM = W67FJT8JS4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = JIFTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.futureworkshops.JIFTest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igorcferreira.JIFVIew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "FW-Ent-All-Development";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -343,6 +508,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7806BF35237F662E0094A041 /* Build configuration list for PBXNativeTarget "JIFTestMacOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7806BF36237F662E0094A041 /* Debug */,
+				7806BF37237F662E0094A041 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		78A4EBDB237658F900F9A318 /* Build configuration list for PBXProject "JIFTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -375,6 +549,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7806BF38237F66430094A041 /* JIFView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 78ACE408237F4DCA00F9F1E9 /* XCRemoteSwiftPackageReference "JIFView" */;
+			productName = JIFView;
+		};
 		78ACE409237F4DCA00F9F1E9 /* JIFView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 78ACE408237F4DCA00F9F1E9 /* XCRemoteSwiftPackageReference "JIFView" */;
