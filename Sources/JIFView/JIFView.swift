@@ -9,19 +9,15 @@
 import SwiftUI
 import Combine
 
-#if canImport(AppKit) && !canImport(SwiftUI)
-public typealias UIImage = NSImage
-#endif
-
 
 /// JIFView is a view able to load and display GIF either from an URL, or in-memory data
 @available(iOS 13, OSX 10.15, *) public struct JIFView: View {
     
-    @State private(set) var image: UIImage? = nil
+    @State private(set) var image: RawImage? = nil
     @State private var subscriber: Cancellable? = nil
     
     
-    private let placeholder: UIImage
+    private let placeholder: RawImage
     private let frameRate: TimeInterval
     private let loop: Bool
     private let source: Source
@@ -36,10 +32,10 @@ public typealias UIImage = NSImage
     ///   - frameRate: Frame rate applied to the GIF
     ///   - loop: Indication if the GIF should return the first frame at end or not
     public init(source: Source,
-                placeholder: UIImage? = nil,
+                placeholder: RawImage? = nil,
                 frameRate: TimeInterval = 0.05,
                 loop: Bool = true) {
-        self.placeholder = placeholder ?? UIImage()
+        self.placeholder = placeholder ?? RawImage()
         self.loop = loop
         self.frameRate = frameRate
         self.source = source
