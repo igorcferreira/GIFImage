@@ -16,7 +16,11 @@ let package = Package(
     targets: [
         .target(
             name: "JIFView",
-            path: "Sources")
+            path: "Sources"),
+        .testTarget(
+            name: "JIFViewTests",
+            dependencies: ["JIFView"],
+            path: "Tests")
     ],
     swiftLanguageVersions: [.v5]
 )
