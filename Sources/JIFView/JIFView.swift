@@ -17,7 +17,7 @@ import Combine
     @State private var subscriber: Cancellable? = nil
     
     
-    private let placeholder: RawImage
+    private let placeholder: RawBananaImage
     private let frameRate: TimeInterval
     private let loop: Bool
     private let source: Source
