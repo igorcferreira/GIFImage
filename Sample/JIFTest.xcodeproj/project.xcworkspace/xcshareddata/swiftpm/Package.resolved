@@ -3,10 +3,10 @@
     "pins": [
       {
         "package": "JIFView",
-        "repositoryURL": "git@github.com:igorcferreira/JIFView.git",
+        "repositoryURL": "https://github.com/igorcferreira/JIFView.git",
         "state": {
           "branch": "master",
-          "revision": "484b3f0ca7aef19cc75a894a72331e14957be728",
+          "revision": "9a780acbe2d765df2412df7b03c355e3d1c4b8e5",
           "version": null
         }
       }

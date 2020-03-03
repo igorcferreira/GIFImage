@@ -11,9 +11,10 @@
 		7806BF2C237F662E0094A041 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7806BF2B237F662E0094A041 /* Assets.xcassets */; };
 		7806BF2F237F662E0094A041 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7806BF2E237F662E0094A041 /* Preview Assets.xcassets */; };
 		7806BF32237F662E0094A041 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7806BF30237F662E0094A041 /* Main.storyboard */; };
-		7806BF39237F66430094A041 /* JIFView in Frameworks */ = {isa = PBXBuildFile; productRef = 7806BF38237F66430094A041 /* JIFView */; };
 		781D8354237A54CD00FE2B66 /* llama.gif in Resources */ = {isa = PBXBuildFile; fileRef = 781D8353237A54CD00FE2B66 /* llama.gif */; };
 		7850C4142385511D00F37246 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4EBE7237658FA00F9A318 /* ContentView.swift */; };
+		787E375E240ED730008A05B8 /* JIFView in Frameworks */ = {isa = PBXBuildFile; productRef = 787E375D240ED730008A05B8 /* JIFView */; };
+		787E3760240ED739008A05B8 /* JIFView in Frameworks */ = {isa = PBXBuildFile; productRef = 787E375F240ED739008A05B8 /* JIFView */; };
 		78945E17237E13D000842B44 /* LocalFileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78945E16237E13D000842B44 /* LocalFileCache.swift */; };
 		78A4EBE4237658FA00F9A318 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4EBE3237658FA00F9A318 /* AppDelegate.swift */; };
 		78A4EBE6237658FA00F9A318 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4EBE5237658FA00F9A318 /* SceneDelegate.swift */; };
@@ -21,7 +22,6 @@
 		78A4EBEA237658FB00F9A318 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78A4EBE9237658FB00F9A318 /* Assets.xcassets */; };
 		78A4EBED237658FB00F9A318 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78A4EBEC237658FB00F9A318 /* Preview Assets.xcassets */; };
 		78A4EBF0237658FB00F9A318 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78A4EBEE237658FB00F9A318 /* LaunchScreen.storyboard */; };
-		78ACE40A237F4DCA00F9F1E9 /* JIFView in Frameworks */ = {isa = PBXBuildFile; productRef = 78ACE409237F4DCA00F9F1E9 /* JIFView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7806BF39237F66430094A041 /* JIFView in Frameworks */,
+				787E3760240ED739008A05B8 /* JIFView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,7 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78ACE40A237F4DCA00F9F1E9 /* JIFView in Frameworks */,
+				787E375E240ED730008A05B8 /* JIFView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,7 +162,7 @@
 			);
 			name = JIFTestMacOS;
 			packageProductDependencies = (
-				7806BF38237F66430094A041 /* JIFView */,
+				787E375F240ED739008A05B8 /* JIFView */,
 			);
 			productName = JIFTestMacOS;
 			productReference = 7806BF25237F662D0094A041 /* JIFTestMacOS.app */;
@@ -182,7 +182,7 @@
 			);
 			name = JIFTest;
 			packageProductDependencies = (
-				78ACE409237F4DCA00F9F1E9 /* JIFView */,
+				787E375D240ED730008A05B8 /* JIFView */,
 			);
 			productName = JIFTest;
 			productReference = 78A4EBE0237658FA00F9A318 /* JIFTest.app */;
@@ -216,7 +216,7 @@
 			);
 			mainGroup = 78A4EBD7237658F900F9A318;
 			packageReferences = (
-				78ACE408237F4DCA00F9F1E9 /* XCRemoteSwiftPackageReference "JIFView" */,
+				787E375C240ED730008A05B8 /* XCRemoteSwiftPackageReference "JIFView" */,
 			);
 			productRefGroup = 78A4EBE1237658FA00F9A318 /* Products */;
 			projectDirPath = "";
@@ -300,10 +300,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = JIFTestMacOS/JIFTestMacOS.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"JIFTestMacOS/Preview Content\"";
-				DEVELOPMENT_TEAM = W67FJT8JS4;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = JIFTestMacOS/Info.plist;
@@ -314,6 +314,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.igorcferreira.macos.JIFTestMacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -324,10 +325,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = JIFTestMacOS/JIFTestMacOS.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"JIFTestMacOS/Preview Content\"";
-				DEVELOPMENT_TEAM = W67FJT8JS4;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = JIFTestMacOS/Info.plist;
@@ -338,6 +339,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.igorcferreira.macos.JIFTestMacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -464,10 +466,10 @@
 				CODE_SIGN_ENTITLEMENTS = JIFTest/JIFTest.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"JIFTest/Preview Content\"";
-				DEVELOPMENT_TEAM = W67FJT8JS4;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = JIFTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -491,10 +493,10 @@
 				CODE_SIGN_ENTITLEMENTS = JIFTest/JIFTest.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"JIFTest/Preview Content\"";
-				DEVELOPMENT_TEAM = W67FJT8JS4;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = JIFTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -544,9 +546,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		78ACE408237F4DCA00F9F1E9 /* XCRemoteSwiftPackageReference "JIFView" */ = {
+		787E375C240ED730008A05B8 /* XCRemoteSwiftPackageReference "JIFView" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:igorcferreira/JIFView.git";
+			repositoryURL = "https://github.com/igorcferreira/JIFView.git";
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -555,14 +557,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7806BF38237F66430094A041 /* JIFView */ = {
+		787E375D240ED730008A05B8 /* JIFView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 78ACE408237F4DCA00F9F1E9 /* XCRemoteSwiftPackageReference "JIFView" */;
+			package = 787E375C240ED730008A05B8 /* XCRemoteSwiftPackageReference "JIFView" */;
 			productName = JIFView;
 		};
-		78ACE409237F4DCA00F9F1E9 /* JIFView */ = {
+		787E375F240ED739008A05B8 /* JIFView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 78ACE408237F4DCA00F9F1E9 /* XCRemoteSwiftPackageReference "JIFView" */;
+			package = 787E375C240ED730008A05B8 /* XCRemoteSwiftPackageReference "JIFView" */;
 			productName = JIFView;
 		};
 /* End XCSwiftPackageProductDependency section */
