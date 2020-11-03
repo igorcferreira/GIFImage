@@ -1,0 +1,51 @@
+# GIFImage
+
+This package contains a SwiftUI View that is able to render a GIF, either from a remote URL, or from a local Data. The component was born from the wish to try out the Combine Framework, and it is more of a learning tool than a production ready code.
+
+## Why not a GIF?
+
+![Hipster LLama](https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif)
+
+## Use
+
+This package can be used with either 3 sources: remote URL, local file path or local data;
+
+```swift
+let url = URL(string: "https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif")!
+
+var localPath: String {
+	let path = Bundle.main.path(forResource: "llama", ofType: "gif")!
+	return path
+}
+
+var localData: Data {
+    let data = try! Data(contentsOf: URL(fileURLWithPath: localPath))
+    return data
+}
+
+var body: some View {
+    List {
+        GIFImage(source: .remote(url: url))
+        GIFImage(source: .local(filePath: localPath))
+        GIFImage(source: .static(data: localData))
+    }
+}
+```
+
+## Configuration
+
+The view can be configured with a placeholder image placed while the GIF is being downloaded, and have the option to change the frame rate as well. An optional error image can also be set. If the error image is not passed, the placeholder will also be used in the case of errors.
+
+```swift
+GIFImage.init(source: GIFSource,
+				loop: Bool = true,
+                placeholder: RawImage = RawImage(),
+                errorImage: RawImage? = nil)
+```
+
+The project has a struct named `GIFLoader` that is responsible for parsing the source into a sequence of frames (later used in the view). This loader has a local cache using `NSCache`. This loader can be configured and set as an environment.
+
+## License
+
+[MIT](LICENSE)
+
