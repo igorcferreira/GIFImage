@@ -8,6 +8,11 @@
 import Foundation
 import Combine
 
+enum GIFError: Error {
+    case invalidSource
+    case unknown
+}
+
 fileprivate class GIFSubscription<Target: Subscriber>: Subscription where Target.Input == GIFFrame {
     let combineIdentifier: CombineIdentifier = CombineIdentifier(UUID().uuidString as NSString)
     
@@ -47,7 +52,7 @@ fileprivate class GIFSubscription<Target: Subscriber>: Subscription where Target
 
 struct GIFPublisher: Publisher {
     typealias Output = GIFFrame
-    typealias Failure = Never
+    typealias Failure = GIFError
     
     let frames: [GIFFrame]
     

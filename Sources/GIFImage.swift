@@ -49,17 +49,21 @@ public struct GIFImage: View {
     private func load(source: GIFSource) {
         cancellable = loader
             .loadSource(source: source)
-            .replaceError(with: [GIFFrame(image: errorImage)])
-            .flatMap(GIFPublisher.init(frames:))
+            .mapError({ _ in GIFError.invalidSource })
+            .flatMap({ GIFPublisher(frames: $0) })
             .subscribe(on: DispatchQueue.global(qos: .background))
             .receive(on: DispatchQueue.main)
-            .handleEvents(receiveCompletion: {
+            .sink(receiveCompletion: { completion in
                 cancellable = nil
-                if case .finished = $0, loop {
-                    load(source: source)
+                switch completion {
+                case .failure:
+                    currentFrame = GIFFrame(image: errorImage)
+                case .finished:
+                    if loop { load(source: source) }
                 }
+            }, receiveValue: { frame in
+                currentFrame = frame
             })
-            .assign(to: \.currentFrame, on: self)
     }
 }
 
