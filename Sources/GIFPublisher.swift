@@ -17,7 +17,6 @@ fileprivate class GIFSubscription<Target: Subscriber>: Subscription where Target
     let combineIdentifier: CombineIdentifier = CombineIdentifier(UUID().uuidString as NSString)
     
     let currentFrame: Int = 0
-    let delayQueue = DispatchQueue(label: "GIFSubscription", qos: .background)
     let frames: [GIFFrame]
     var target: Target?
     
@@ -44,8 +43,10 @@ fileprivate class GIFSubscription<Target: Subscriber>: Subscription where Target
         guard frame < frames.count else { return finish() }
         let gifFrame = frames[frame]
         let _ = target.receive(gifFrame)
-        delayQueue.asyncAfter(deadline: .now() + gifFrame.delay) { [weak self] in
-            self?.trigger(frame: frame + 1)
+        DispatchQueue
+            .global(qos: .userInteractive)
+            .asyncAfter(deadline: .now() + gifFrame.delay) { [weak self] in
+                self?.trigger(frame: frame + 1)
         }
     }
 }
