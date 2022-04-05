@@ -1,0 +1,20 @@
+name: Swift
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: fwal/setup-swift@v1
+    - name: Check swift version
+      run: swift --version # Swift 5.3.3
+    - uses: actions/checkout@v3
+    - name: Build
+      run: swift build -v

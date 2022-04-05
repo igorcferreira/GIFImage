@@ -2,12 +2,11 @@
 //  File.swift
 //  
 //
-//  Created by Igor Ferreira on 29/10/2020.
+//  Created by Igor Ferreira on 05/04/2022.
 //
 
-import Foundation
+import CoreImage
 import SwiftUI
-
 #if os(macOS)
 import AppKit
 public typealias RawImage = NSImage

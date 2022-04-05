@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -8,7 +8,7 @@ let packageName = "GIFImage"
 let package = Package(
     name: packageName,
     platforms: [
-        .macOS(.v11), .iOS(.v13), .tvOS(.v13)
+        .macOS(.v12), .iOS(.v15), .tvOS(.v15)
     ],
     products: [
         .library(

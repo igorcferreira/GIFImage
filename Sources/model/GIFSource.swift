@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum GIFSource {
+public enum GIFSource: Equatable {
     case remote(url: URL)
     case local(filePath: String)
     case `static`(data: Data)
