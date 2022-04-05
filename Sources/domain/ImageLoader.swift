@@ -34,6 +34,18 @@ private extension GIFSource {
     }
 }
 
+private extension String {
+    func loadData(fileManager: FileManager) async throws -> Data {
+        guard fileManager.fileExists(atPath: self) else {
+            throw URLError(URLError.fileDoesNotExist)
+        }
+        guard let data = fileManager.contents(atPath: self) else {
+            throw URLError(URLError.cannotOpenFile)
+        }
+        return data
+    }
+}
+
 private extension URL {
     func loadData(session: URLSession, cache: URLCache) async throws -> Data {
         let request = URLRequest(url: self)
@@ -45,21 +57,15 @@ private extension URL {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)
         }
-        guard (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300) else {
+        guard httpResponse.isSuccess else {
             throw URLError(URLError.Code(rawValue: httpResponse.statusCode))
         }
         return data
     }
 }
 
-private extension String {
-    func loadData(fileManager: FileManager) async throws -> Data {
-        guard fileManager.fileExists(atPath: self) else {
-            throw URLError(URLError.fileDoesNotExist)
-        }
-        guard let data = fileManager.contents(atPath: self) else {
-            throw URLError(URLError.cannotOpenFile)
-        }
-        return data
+private extension HTTPURLResponse {
+    var isSuccess: Bool {
+        200..<300 ~= statusCode
     }
 }
