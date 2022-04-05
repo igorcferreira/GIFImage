@@ -54,8 +54,11 @@ private extension URL {
 
 private extension String {
     func loadData(fileManager: FileManager) async throws -> Data {
+        guard fileManager.fileExists(atPath: self) else {
+            throw URLError(URLError.fileDoesNotExist)
+        }
         guard let data = fileManager.contents(atPath: self) else {
-            throw URLError(URLError.badURL)
+            throw URLError(URLError.cannotOpenFile)
         }
         return data
     }
