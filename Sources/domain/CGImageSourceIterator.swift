@@ -8,21 +8,21 @@
 import Foundation
 import CoreImage
 
-struct CGImageSourceIterator: AsyncIteratorProtocol {
+public struct CGImageSourceIterator: AsyncIteratorProtocol {
     
-    let loop: Bool
-    let frameCount: Int
-    let source: CGImageSource
-    var currentFrame: Int
+    public let loop: Bool
+    public let frameCount: Int
+    public let source: CGImageSource
+    public private(set) var currentFrame: Int
     
-    init(source: CGImageSource, loop: Bool) {
+    public init(source: CGImageSource, loop: Bool) {
         self.source = source
         self.frameCount = CGImageSourceGetCount(source)
         self.currentFrame = 0
         self.loop = loop
     }
     
-    mutating func next() async throws -> ImageFrame? {
+    public mutating func next() async throws -> ImageFrame? {
         
         if currentFrame >= frameCount {
             if loop {
@@ -42,7 +42,7 @@ struct CGImageSourceIterator: AsyncIteratorProtocol {
         return frame
     }
     
-    mutating func reset() {
+    public mutating func reset() {
         currentFrame = 0
     }
 }

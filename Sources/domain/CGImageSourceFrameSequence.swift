@@ -8,18 +8,18 @@
 import Foundation
 import CoreImage
 
-struct CGImageSourceFrameSequence: AsyncSequence {
-    typealias Element = ImageFrame
+public struct CGImageSourceFrameSequence: AsyncSequence {
+    public typealias Element = ImageFrame
     
-    let source: CGImageSource
-    let loop: Bool
+    public let source: CGImageSource
+    public let loop: Bool
     
-    init(source: CGImageSource, loop: Bool) {
+    public init(source: CGImageSource, loop: Bool) {
         self.source = source
         self.loop = loop
     }
     
-    func makeAsyncIterator() -> CGImageSourceIterator {
+    public func makeAsyncIterator() -> CGImageSourceIterator {
         CGImageSourceIterator(source: source, loop: loop)
     }
 }
