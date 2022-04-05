@@ -32,6 +32,20 @@ var body: some View {
 }
 ```
 
+To help with general cases, the `GIFImage` can also be created using an URL string or a plain URL:
+
+```
+let urlString = "https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif"
+let url = URL(string: urlString)!
+
+var body: some View {
+    List {
+        GIFImage(url: urlString)
+        GIFImage(url: url)
+    }
+}
+```
+
 ## Configuration
 
 The view can be configured with a placeholder image placed while the GIF is being downloaded, and have the option to change the frame rate as well. An optional error image can also be set. If the error image is not passed, the placeholder will also be used in the case of errors.
