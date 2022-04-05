@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Object responsible to load a `GIFSource` into a `ImageFrame` stream.
 public struct ImageLoader {
     public let session: URLSession
     public let cache: URLCache
