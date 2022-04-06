@@ -59,7 +59,7 @@ GIFImage.init(
 )
 ```
 
-The project has a struct named `GIFLoader` that is responsible for parsing the source into a sequence of frames (later used in the view). This loader has a local cache using `NSCache`. This loader can be configured and set as an environment.
+The project has a struct named `ImageLoader` that is responsible for parsing the source into a sequence of frames (later used in the view). This loader has a local cache using `URLCache`. The view will fetch the image loader from the view environment. So, if a different cache limits or file manager wants to be used, the `\.imageLoader` environment key can be used to override the default instance.
 
 ## License
 
