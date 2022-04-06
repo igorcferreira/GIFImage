@@ -9,5 +9,6 @@ import Foundation
 
 public enum FrameRate {
     case dynamic
+    case limited(fps: Int)
     case `static`(fps: Int)
 }

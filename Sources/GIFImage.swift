@@ -81,10 +81,14 @@ public struct GIFImage: View {
     
     func update(_ imageFrame: ImageFrame) async throws -> Void {
         frame = RawImage.create(with: imageFrame.image)
+        let calculatedInterval = imageFrame.interval ?? kDefaultGIFFrameInterval
         let interval: Double
         switch(frameRate) {
         case .static(let fps):
             interval = (1.0 / Double(fps))
+        case .limited(let fps):
+            let intervalLimit = (1.0 / Double(fps))
+            interval = max(calculatedInterval, intervalLimit)
         case .dynamic:
             interval = imageFrame.interval ?? kDefaultGIFFrameInterval
         }
@@ -97,7 +101,7 @@ struct GIFImage_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             GIFImage(url: gifURL)
-            GIFImage(url: gifURL, frameRate: .static(fps: 24))
+            GIFImage(url: gifURL, frameRate: .limited(fps: 24))
             GIFImage(url: gifURL, frameRate: .static(fps: 120))
         }
     }
