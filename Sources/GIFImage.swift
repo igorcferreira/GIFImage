@@ -98,11 +98,17 @@ public struct GIFImage: View {
 
 struct GIFImage_Previews: PreviewProvider {
     static let gifURL = "https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif"
+    static let placeholder = RawImage.create(symbol: "photo.circle.fill")!
+    static let error = RawImage.create(symbol: "xmark.octagon")
+
     static var previews: some View {
         Group {
-            GIFImage(url: gifURL)
-            GIFImage(url: gifURL, frameRate: .limited(fps: 24))
-            GIFImage(url: gifURL, frameRate: .static(fps: 120))
+            GIFImage(url: gifURL, placeholder: placeholder, errorImage: error)
+                .frame(width: 350.0, height: 197.0, alignment: .center)
+            GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .limited(fps: 5))
+                .frame(width: 350.0, height: 197.0, alignment: .center)
+            GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .static(fps: 30))
+                .frame(width: 350.0, height: 197.0, alignment: .center)
         }
     }
 }
