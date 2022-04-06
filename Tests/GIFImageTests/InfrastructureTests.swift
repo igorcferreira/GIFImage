@@ -30,4 +30,17 @@ final class InfrastructureTests: XCTestCase {
             XCTAssertEqual((error as? URLError)?.code, URLError.Code.fileDoesNotExist)
         }
     }
+    
+    func testMockedFileManager() async throws {
+        let fileManager = MockedFileManager()
+        let data = Data()
+        let path = "/mock/path"
+        fileManager.register(data, toPath: path)
+        
+        XCTAssertFalse(fileManager.fileExists(atPath: "/mock/empty_path"))
+        XCTAssertNil(fileManager.contents(atPath: "/mock/empty_path"))
+        
+        XCTAssertTrue(fileManager.fileExists(atPath: path))
+        XCTAssertEqual(data, fileManager.contents(atPath: path))
+    }
 }
