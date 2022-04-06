@@ -17,10 +17,4 @@ jobs:
     - name: Build
       run: swift build -v
     - name: Test
-      run: |
-        xcodebuild -workspace .swiftpm/xcode/package.xcworkspace \
-        -scheme GIFImage \
-        -sdk iphonesimulator \
-        -toolchain "${TOOLCHAINS}" \
-        -destination 'platform=iOS Simulator,name=iPhone 8' \
-        clean build test
+      run: swift test
