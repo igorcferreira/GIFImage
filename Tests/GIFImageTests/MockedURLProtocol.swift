@@ -39,16 +39,28 @@ final class MockedURLProtocol: URLProtocol {
     override func startLoading() {
         guard let url = self.request.url, let result = MockedURLProtocol.results[url] else {
             self.client?.urlProtocol(self, didFailWithError: URLError(.badURL))
+            self.client?.urlProtocolDidFinishLoading(self)
             return
         }
         
         switch(result) {
-        case .success(let data): self.client?.urlProtocol(self, didLoad: data)
-        case .failure(let error): self.client?.urlProtocol(self, didFailWithError: error)
+        case .success(let data): self.completeRequest(url: url, data: data)
+        case .failure(let error): self.failRequest(url: url, error: error)
         }
-        
-        self.client?.urlProtocolDidFinishLoading(self)
     }
     
     override func stopLoading() {}
+    
+    private func failRequest(url: URL, error: URLError) {
+        let response = HTTPURLResponse(url: url, statusCode: error.code.rawValue, httpVersion: nil, headerFields: nil)!
+        self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        self.client?.urlProtocol(self, didFailWithError: error)
+    }
+    
+    private func completeRequest(url: URL, data: Data) {
+        let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        self.client?.urlProtocol(self, didLoad: data)
+        self.client?.urlProtocolDidFinishLoading(self)
+    }
 }
