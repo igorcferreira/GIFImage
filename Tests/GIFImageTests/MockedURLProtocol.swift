@@ -54,7 +54,7 @@ final class MockedURLProtocol: URLProtocol {
     private func failRequest(url: URL, error: URLError) {
         let response = HTTPURLResponse(url: url, statusCode: error.code.rawValue, httpVersion: nil, headerFields: nil)!
         self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-        self.client?.urlProtocol(self, didFailWithError: error)
+        self.client?.urlProtocolDidFinishLoading(self)
     }
     
     private func completeRequest(url: URL, data: Data) {

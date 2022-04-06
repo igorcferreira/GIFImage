@@ -22,15 +22,12 @@ final class InfrastructureTests: XCTestCase {
     
     func testBasicMockStructure() async throws {
         let url = URL(string: "https://www.test.com")!
-        MockedURLProtocol.register(.failure(URLError(.fileDoesNotExist)), to: url)
+        MockedURLProtocol.register(.failure(URLError(.init(rawValue: 404))), to: url)
         let urlSession = MockedURLProtocol.buildTestSession()
         
-        do {
-            let _ = try await urlSession.data(for: URLRequest(url: url))
-            XCTFail("URL Session request should have thrown")
-        } catch {
-            XCTAssertEqual((error as? URLError)?.code, URLError.Code.fileDoesNotExist)
-        }
+        let (data, response) = try await urlSession.data(for: URLRequest(url: url))
+        XCTAssertEqual(data, Data())
+        XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 404)
     }
     
     func testMockedFileManager() async throws {
