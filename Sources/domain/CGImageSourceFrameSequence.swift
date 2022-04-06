@@ -14,6 +14,13 @@ public struct CGImageSourceFrameSequence: AsyncSequence {
     public let source: CGImageSource
     public let loop: Bool
     
+    public init?(data: Data, loop: Bool) {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            return nil
+        }
+        self.init(source: source, loop: loop)
+    }
+    
     public init(source: CGImageSource, loop: Bool) {
         self.source = source
         self.loop = loop

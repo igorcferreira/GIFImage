@@ -10,9 +10,9 @@ import CoreImage
 
 extension Data {
     func imageAsyncSequence(loop: Bool) throws -> CGImageSourceFrameSequence {
-        guard let source = CGImageSourceCreateWithData(self as CFData, nil) else {
-            throw URLError(.badServerResponse)
+        guard let sequence = CGImageSourceFrameSequence(data: self, loop: loop) else {
+            throw URLError(.cannotDecodeContentData)
         }
-        return source.asyncSequence(loop: loop)
+        return sequence
     }
 }

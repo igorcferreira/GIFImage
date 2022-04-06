@@ -9,11 +9,6 @@ import Foundation
 import CoreImage
 
 extension CGImageSource {
-    
-    func asyncSequence(loop: Bool) -> CGImageSourceFrameSequence {
-        CGImageSourceFrameSequence(source: self, loop: loop)
-    }
-    
     func intervalAtIndex(_ index: Int) -> TimeInterval? {
         guard let properties = CGImageSourceCopyPropertiesAtIndex(self, index, nil) else {
             return nil

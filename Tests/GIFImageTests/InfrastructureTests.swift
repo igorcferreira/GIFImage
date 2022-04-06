@@ -1,0 +1,33 @@
+//
+//  File.swift
+//  
+//
+//  Created by Igor Ferreira on 06/04/2022.
+//
+
+import XCTest
+@testable import GIFImage
+
+final class InfrastructureTests: XCTestCase {
+    
+    override func setUp() async throws {
+        URLProtocol.registerClass(MockedURLProtocol.self)
+    }
+    
+    override func tearDown() async throws {
+        URLProtocol.unregisterClass(MockedURLProtocol.self)
+    }
+    
+    func testBasicMockStructure() async throws {
+        let url = URL(string: "https://www.test.com")!
+        MockedURLProtocol.register(.failure(URLError(.fileDoesNotExist)), to: url)
+        let urlSession = MockedURLProtocol.buildTestSession()
+        
+        do {
+            let _ = try await urlSession.data(for: URLRequest(url: url))
+            XCTFail("URL Session request should have thrown")
+        } catch {
+            XCTAssertEqual((error as? URLError)?.code, URLError.Code.fileDoesNotExist)
+        }
+    }
+}
