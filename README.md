@@ -4,7 +4,7 @@ This package contains a SwiftUI View that is able to render a GIF, either from a
 
 ## Why not a GIF?
 
-![Hipster LLama](Tests/GIFImageTests/Resources/test.gif)
+![Hipster LLama](https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif)
 
 ## Use
 
