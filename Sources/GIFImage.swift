@@ -26,7 +26,13 @@ public struct GIFImage: View {
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
     ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
-    public init(source: GIFSource, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil, frameRate: FrameRate = .dynamic) {
+    public init(
+        source: GIFSource,
+        loop: Bool = true,
+        placeholder: RawImage = RawImage(),
+        errorImage: RawImage? = nil,
+        frameRate: FrameRate = .dynamic
+    ) {
         self.source = source
         self.loop = loop
         self.placeholder = placeholder
@@ -34,52 +40,24 @@ public struct GIFImage: View {
         self.frameRate = frameRate
     }
     
-    /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
-    /// into frames and stream them based in the "Delay" key packaged on which frame item.
-    ///
-    /// - Parameters:
-    ///   - url: URL string of the image. If the string cannot be parsed into URL, this constructor early aborts and returns `nil`
-    ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
-    ///   - placeholder: Image to be used before the source is loaded
-    ///   - errorImage: If the stream fails, this image is used
-    ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
-    public init?(url: String, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil, frameRate: FrameRate = .dynamic) {
-        guard let resolvedURL = URL(string: url) else {
-            return nil
-        }
-        let source = GIFSource.remote(url: resolvedURL)
-        self.init(source: source, loop: loop, placeholder: placeholder, errorImage: errorImage, frameRate: frameRate)
-    }
-    
-    /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
-    /// into frames and stream them based in the "Delay" key packaged on which frame item.
-    ///
-    /// - Parameters:
-    ///   - url: URL of the image. The response is cached using `URLCache`
-    ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
-    ///   - placeholder: Image to be used before the source is loaded
-    ///   - errorImage: If the stream fails, this image is used
-    ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
-    public init(url: URL, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil, frameRate: FrameRate = .dynamic) {
-        let source = GIFSource.remote(url: url)
-        self.init(source: source, loop: loop, placeholder: placeholder, errorImage: errorImage, frameRate: frameRate)
-    }
-    
     public var body: some View {
-        Image.loadImage(with: frame ?? placeholder).task(id: source) { await load() }
+        Image.loadImage(with: frame ?? placeholder)
+            .task(id: source, self.load)
     }
     
-    func load() async -> Void {
+    @Sendable
+    private func load() async -> Void {
         do {
             for try await imageFrame in try await imageLoader.load(source: source, loop: loop) {
                 try await update(imageFrame)
             }
         } catch {
-            frame = errorImage
+            frame = errorImage ?? placeholder
         }
     }
     
-    func update(_ imageFrame: ImageFrame) async throws -> Void {
+    @Sendable
+    private func update(_ imageFrame: ImageFrame) async throws -> Void {
         frame = RawImage.create(with: imageFrame.image)
         let calculatedInterval = imageFrame.interval ?? kDefaultGIFFrameInterval
         let interval: Double
