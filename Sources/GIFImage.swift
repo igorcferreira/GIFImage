@@ -11,6 +11,7 @@ public struct GIFImage: View {
     public let loop: Bool
     public let placeholder: RawImage
     public let errorImage: RawImage?
+    public let frameRate: FrameRate
     
     @Environment(\.imageLoader) var imageLoader
     @State private var frame: RawImage? = nil
@@ -24,11 +25,13 @@ public struct GIFImage: View {
     ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
-    public init(source: GIFSource, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil) {
+    ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
+    public init(source: GIFSource, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil, frameRate: FrameRate = .dynamic) {
         self.source = source
         self.loop = loop
         self.placeholder = placeholder
         self.errorImage = errorImage
+        self.frameRate = frameRate
     }
     
     /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
@@ -39,12 +42,13 @@ public struct GIFImage: View {
     ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
-    public init?(url: String, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil) {
+    ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
+    public init?(url: String, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil, frameRate: FrameRate = .dynamic) {
         guard let resolvedURL = URL(string: url) else {
             return nil
         }
         let source = GIFSource.remote(url: resolvedURL)
-        self.init(source: source, loop: loop, placeholder: placeholder, errorImage: errorImage)
+        self.init(source: source, loop: loop, placeholder: placeholder, errorImage: errorImage, frameRate: frameRate)
     }
     
     /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
@@ -55,9 +59,10 @@ public struct GIFImage: View {
     ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
-    public init(url: URL, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil) {
+    ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
+    public init(url: URL, loop: Bool = true, placeholder: RawImage = RawImage(), errorImage: RawImage? = nil, frameRate: FrameRate = .dynamic) {
         let source = GIFSource.remote(url: url)
-        self.init(source: source, loop: loop, placeholder: placeholder, errorImage: errorImage)
+        self.init(source: source, loop: loop, placeholder: placeholder, errorImage: errorImage, frameRate: frameRate)
     }
     
     public var body: some View {
@@ -76,13 +81,28 @@ public struct GIFImage: View {
     
     func update(_ imageFrame: ImageFrame) async throws -> Void {
         frame = RawImage.create(with: imageFrame.image)
-        let interval = imageFrame.interval ?? kDefaultGIFFrameInterval
+        let calculatedInterval = imageFrame.interval ?? kDefaultGIFFrameInterval
+        let interval: Double
+        switch(frameRate) {
+        case .static(let fps):
+            interval = (1.0 / Double(fps))
+        case .limited(let fps):
+            let intervalLimit = (1.0 / Double(fps))
+            interval = max(calculatedInterval, intervalLimit)
+        case .dynamic:
+            interval = imageFrame.interval ?? kDefaultGIFFrameInterval
+        }
         try await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000.0))
     }
 }
 
 struct GIFImage_Previews: PreviewProvider {
+    static let gifURL = "https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif"
     static var previews: some View {
-        GIFImage(url: "https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif")
+        Group {
+            GIFImage(url: gifURL)
+            GIFImage(url: gifURL, frameRate: .limited(fps: 24))
+            GIFImage(url: gifURL, frameRate: .static(fps: 120))
+        }
     }
 }
