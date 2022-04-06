@@ -12,10 +12,12 @@ final class InfrastructureTests: XCTestCase {
     
     override func setUp() async throws {
         URLProtocol.registerClass(MockedURLProtocol.self)
+        MockedURLProtocol.reset()
     }
     
     override func tearDown() async throws {
         URLProtocol.unregisterClass(MockedURLProtocol.self)
+        MockedURLProtocol.reset()
     }
     
     func testBasicMockStructure() async throws {

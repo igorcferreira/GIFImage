@@ -23,7 +23,10 @@ let package = Package(
         ),
         .testTarget(
             name: "\(packageName)Tests",
-            dependencies: ["GIFImage"]
+            dependencies: ["GIFImage"],
+            resources: [
+                .copy("test.gif")
+            ]
         )
     ]
 )

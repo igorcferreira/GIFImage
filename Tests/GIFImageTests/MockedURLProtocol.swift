@@ -19,6 +19,10 @@ final class MockedURLProtocol: URLProtocol {
         results.removeValue(forKey: url)
     }
     
+    static func reset() {
+        results.removeAll()
+    }
+    
     static func buildTestSession() -> URLSession {
         let baseConfiguration = URLSessionConfiguration.default
         baseConfiguration.protocolClasses = [MockedURLProtocol.self] + (baseConfiguration.protocolClasses ?? [])
