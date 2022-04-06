@@ -84,5 +84,18 @@ class ImageLoaderTests: XCTestCase {
         XCTAssertEqual(frameCount, testGIFFrameCount)
         XCTAssertTrue(duration.equal(testGIFDuration, precise: 2), "\(duration) is not equal to \(testGIFDuration)")
     }
+    
+    func testRemoteSourceLoading() async throws {
+        let urlSession = MockedURLProtocol.buildTestSession()
+        let fileManager = MockedFileManager()
+        MockedURLProtocol.register(.success(gifData), to: url)
+        
+        let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
+        let sequence = try await imageLoader.load(source: GIFSource.remote(url: url), loop: false)
+        
+        let (frameCount, duration) = try await sequence.reduce((0, 0.0)) { partial, frame in (partial.0 + 1, partial.1 + (frame.interval ?? 0.0)) }
+        XCTAssertEqual(frameCount, testGIFFrameCount)
+        XCTAssertTrue(duration.equal(testGIFDuration, precise: 2), "\(duration) is not equal to \(testGIFDuration)")
+    }
 
 }
