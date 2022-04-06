@@ -25,7 +25,7 @@ let package = Package(
             name: "\(packageName)Tests",
             dependencies: ["GIFImage"],
             resources: [
-                .copy("test.gif")
+                .process("test.gif")
             ]
         )
     ]
