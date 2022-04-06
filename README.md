@@ -55,7 +55,8 @@ GIFImage.init(
     source: GIFSource,
     loop: Bool = true,
     placeholder: RawImage = RawImage(),
-    errorImage: RawImage? = nil
+    errorImage: RawImage? = nil,
+    frameRate: FrameRate = .dynamic
 )
 ```
 
