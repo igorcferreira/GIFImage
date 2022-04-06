@@ -8,6 +8,6 @@
 import CoreImage
 
 public struct ImageFrame {
-    let image: CGImage
-    let interval: TimeInterval?
+    public let image: CGImage
+    public let interval: TimeInterval?
 }
