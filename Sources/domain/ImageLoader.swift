@@ -38,10 +38,10 @@ private extension GIFSource {
 private extension String {
     func loadData(fileManager: FileManager) async throws -> Data {
         guard fileManager.fileExists(atPath: self) else {
-            throw URLError(URLError.fileDoesNotExist)
+            throw URLError(.fileDoesNotExist)
         }
         guard let data = fileManager.contents(atPath: self) else {
-            throw URLError(URLError.cannotOpenFile)
+            throw URLError(.cannotOpenFile)
         }
         return data
     }
@@ -59,7 +59,7 @@ private extension URL {
             throw URLError(.badServerResponse)
         }
         guard httpResponse.isSuccess else {
-            throw URLError(URLError.Code(rawValue: httpResponse.statusCode))
+            throw URLError(.init(rawValue: httpResponse.statusCode))
         }
         return data
     }

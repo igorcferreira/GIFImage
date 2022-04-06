@@ -20,6 +20,10 @@ let package = Package(
             name: packageName,
             dependencies: [],
             path: "Sources"
+        ),
+        .testTarget(
+            name: "\(packageName)Tests",
+            dependencies: ["GIFImage"]
         )
     ]
 )
