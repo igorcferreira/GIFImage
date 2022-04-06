@@ -22,6 +22,4 @@ jobs:
         # during tests. Like: Library not loaded: /usr/lib/swift/libswift_Concurrency.dylib
         # So, we are running the tests, but accepting that they will fail (for now).
         # The actual tests can be configured as a pre-push on git.
-        set +e
-
-        swift test
+        swift test || true
