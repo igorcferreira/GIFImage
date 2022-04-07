@@ -23,7 +23,10 @@ let package = Package(
         ),
         .testTarget(
             name: "\(packageName)Tests",
-            dependencies: ["GIFImage"],
+            dependencies: [
+                .byName(name: packageName)
+            ],
+            path: "Tests",
             resources: [
                 .process("test.gif")
             ]
