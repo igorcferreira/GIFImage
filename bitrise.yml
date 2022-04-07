@@ -1,0 +1,59 @@
+---
+format_version: '11'
+default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+project_type: other
+workflows:
+  build:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+    - script@1:
+        title: Build macos artefact
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            swift package reset
+            swift build -v
+    - deploy-to-bitrise-io@2: {}
+  test:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+    - script@1:
+        title: Run tests
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            swift package reset
+
+            # Test macOS layer
+            swift test
+
+            # Test iOS layer
+            xcodebuild -workspace .swiftpm/xcode/package.xcworkspace \
+            -scheme GIFImage \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 8' \
+            build test
+    - deploy-to-bitrise-io@2: {}
+meta:
+  bitrise.io:
+    stack: osx-xcode-13.3.x
+trigger_map:
+- push_branch: main
+  workflow: build
+- pull_request_source_branch: '*'
+  pull_request_target_branch: main
+  workflow: test
