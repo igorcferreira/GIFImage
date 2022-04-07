@@ -1,4 +1,4 @@
-# GIFImage [![Build Status](https://app.bitrise.io/app/5d06df6ec52f3a19/status.svg?token=yjYOOJ6S8L0cVY93apWIPQ&branch=main)](https://app.bitrise.io/app/5d06df6ec52f3a19)
+# GIFImage [![Build Status](https://app.bitrise.io/app/d733d1c0249a401a/status.svg?token=4LmnxZKU0GgcdG6IehKB0Q&branch=master)](https://app.bitrise.io/app/d733d1c0249a401a)
 
 This package contains a SwiftUI View that is able to render a GIF, either from a remote URL, or from a local Data. The component was born from the wish to try out the Combine Framework, and it is more of a learning tool than a production ready code.
 
