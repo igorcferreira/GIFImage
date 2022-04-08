@@ -42,6 +42,8 @@ public struct GIFImage: View {
     
     public var body: some View {
         Image.loadImage(with: frame ?? placeholder)
+            .resizable()
+            .scaledToFit()
             .task(id: source, self.load)
     }
     

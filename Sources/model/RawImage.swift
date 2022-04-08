@@ -15,7 +15,7 @@ import UIKit
 public typealias RawImage = UIImage
 #endif
 
-extension RawImage {
+public extension RawImage {
     static func create(with cgImage: CGImage) -> RawImage {
         #if os(macOS)
         return RawImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
@@ -33,7 +33,7 @@ extension RawImage {
     }
 }
 
-extension Image {
+public extension Image {
     static func loadImage(with image: RawImage) -> Image {
         #if os(macOS)
         return Image(nsImage: image)
