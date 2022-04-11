@@ -35,7 +35,7 @@ public extension GIFImage {
             frameRate: frameRate
         )
     }
-    
+
     /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
     /// into frames and stream them based in the "Delay" key packaged on which frame item.
     ///

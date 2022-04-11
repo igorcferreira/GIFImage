@@ -12,11 +12,10 @@ public struct GIFImage: View {
     public let placeholder: RawImage
     public let errorImage: RawImage?
     public let frameRate: FrameRate
-    
+
     @Environment(\.imageLoader) var imageLoader
-    @State private var frame: RawImage? = nil
-    
-    
+    @State private var frame: RawImage?
+
     /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
     /// into frames and stream them based in the "Delay" key packaged on which frame item.
     ///
@@ -39,16 +38,16 @@ public struct GIFImage: View {
         self.errorImage = errorImage
         self.frameRate = frameRate
     }
-    
+
     public var body: some View {
         Image.loadImage(with: frame ?? placeholder)
             .resizable()
             .scaledToFit()
             .task(id: source, self.load)
     }
-    
+
     @Sendable
-    private func load() async -> Void {
+    private func load() async {
         do {
             for try await imageFrame in try await imageLoader.load(source: source, loop: loop) {
                 try await update(imageFrame)
@@ -57,13 +56,13 @@ public struct GIFImage: View {
             frame = errorImage ?? placeholder
         }
     }
-    
+
     @Sendable
-    private func update(_ imageFrame: ImageFrame) async throws -> Void {
+    private func update(_ imageFrame: ImageFrame) async throws {
         frame = RawImage.create(with: imageFrame.image)
         let calculatedInterval = imageFrame.interval ?? kDefaultGIFFrameInterval
         let interval: Double
-        switch(frameRate) {
+        switch frameRate {
         case .static(let fps):
             interval = (1.0 / Double(fps))
         case .limited(let fps):

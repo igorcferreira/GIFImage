@@ -23,7 +23,7 @@ public extension RawImage {
         return RawImage(cgImage: cgImage)
         #endif
     }
-    
+
     static func create(symbol: String) -> RawImage? {
         #if os(macOS)
         return RawImage(systemSymbolName: symbol, accessibilityDescription: nil)

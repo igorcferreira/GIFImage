@@ -11,9 +11,7 @@ let package = Package(
         .macOS(.v12), .iOS(.v15), .tvOS(.v15)
     ],
     products: [
-        .library(
-            name: packageName,
-            targets: [packageName]),
+        .library(name: packageName, targets: [packageName])
     ],
     targets: [
         .target(
