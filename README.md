@@ -4,14 +4,14 @@ This package contains a SwiftUI View that is able to render a GIF, either from a
 
 ## Why not a GIF?
 
-![Hipster LLama](https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif)
+![Hipster LLama](Tests/test.gif)
 
 ## Use
 
 This package can be used with either 3 sources: remote URL, local file path or local data;
 
 ```swift
-let url = URL(string: "https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif")!
+let url = URL(string: "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif")!
 
 var localPath: String {
 	let path = Bundle.main.path(forResource: "llama", ofType: "gif")!
@@ -35,7 +35,7 @@ var body: some View {
 To help with general cases, the `GIFImage` can also be created using an URL string or a plain URL:
 
 ```swift
-let urlString = "https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif"
+let urlString = "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif"
 let url = URL(string: urlString)!
 
 var body: some View {
