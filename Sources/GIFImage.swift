@@ -76,7 +76,7 @@ public struct GIFImage: View {
 }
 
 struct GIFImage_Previews: PreviewProvider {
-    static let gifURL = "https://64.media.tumblr.com/eb81c4d7288732e2b6a9e63c166c623a/tumblr_mi3vj5Api71ryhf5lo1_400.gif"
+    static let gifURL = "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif"
     static let placeholder = RawImage.create(symbol: "photo.circle.fill")!
     static let error = RawImage.create(symbol: "xmark.octagon")
 
