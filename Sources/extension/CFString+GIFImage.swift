@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CoreImage
+import ImageIO
 
 extension CFString {
     var asKey: UnsafeMutableRawPointer {

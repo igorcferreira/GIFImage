@@ -56,7 +56,11 @@ class ImageLoaderTests: XCTestCase {
             _ = try await imageLoader.load(source: GIFSource.remote(url: url), loop: false)
             XCTFail("Sequence should throw error")
         } catch {
+            #if os(watchOS)
+            XCTAssertEqual((error as? URLError)?.code, URLError.Code.init(rawValue: -1001))
+            #else
             XCTAssertEqual((error as? URLError)?.code, URLError.Code.badURL)
+            #endif
         }
     }
 

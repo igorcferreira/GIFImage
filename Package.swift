@@ -8,7 +8,7 @@ let packageName = "GIFImage"
 let package = Package(
     name: packageName,
     platforms: [
-        .macOS(.v12), .iOS(.v15), .tvOS(.v15)
+        .macOS(.v12), .iOS(.v15), .tvOS(.v15), .watchOS(.v8)
     ],
     products: [
         .library(name: packageName, targets: [packageName])

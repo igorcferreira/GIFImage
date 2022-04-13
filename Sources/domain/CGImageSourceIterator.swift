@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CoreImage
+import ImageIO
 
 public struct CGImageSourceIterator: AsyncIteratorProtocol {
 
