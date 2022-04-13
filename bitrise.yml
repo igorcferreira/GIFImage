@@ -78,7 +78,7 @@ workflows:
             find "${BITRISE_SOURCE_DIR}/.tmp" -name "*.xcresult" -exec cp -r {} "${BITRISE_DEPLOY_DIR}" \;
             
             rm -rf "${BITRISE_SOURCE_DIR}/.tmp"
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
         inputs:
         - zip_name: test_result
         - is_compress: 'true'
