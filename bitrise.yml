@@ -26,17 +26,9 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
-    - script@1:
-        title: Run Swift Lint
+    - swiftlint-extended@1:
         inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            swiftlint
+        - linting_path: $BITRISE_SOURCE_DIR
     - script@1:
         title: Run tests
         inputs:
@@ -52,36 +44,19 @@ workflows:
 
             # Test macOS layer
             swift test --parallel --xunit-output "${BITRISE_DEPLOY_DIR}/swift_test.xml"
-
-            # Test iOS layer
-            xcodebuild -workspace .swiftpm/xcode/package.xcworkspace \
-            -scheme GIFImage \
-            -derivedDataPath "${BITRISE_SOURCE_DIR}/.tmp" \
-            -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 8' \
-            -parallel-testing-enabled \
-            -enableCodeCoverage \
-            -quiet \
-            build-for-testing test
-
-            # Test tvOS layer
-            xcodebuild -workspace .swiftpm/xcode/package.xcworkspace \
-            -scheme GIFImage \
-            -derivedDataPath "${BITRISE_SOURCE_DIR}/.tmp" \
-            -sdk appletvsimulator \
-            -destination 'platform=tvOS Simulator,name=Apple TV' \
-            -parallel-testing-enabled \
-            -enableCodeCoverage \
-            -quiet \
-            build-for-testing test
-            
-            find "${BITRISE_SOURCE_DIR}/.tmp" -name "*.xcresult" -exec cp -r {} "${BITRISE_DEPLOY_DIR}" \;
-            
-            rm -rf "${BITRISE_SOURCE_DIR}/.tmp"
-    - deploy-to-bitrise-io@2:
+    - xcode-test@4:
         inputs:
-        - zip_name: test_result
-        - is_compress: 'true'
+        - scheme: $BUILD_SCHEME
+        - project_path: $WORKSPACE_PATH
+        - xcodebuild_options: $BUILD_OPTIONS
+    - xcode-test@4:
+        inputs:
+        - scheme: $BUILD_SCHEME
+        - destination: 'platform=tvOS Simulator,name=Apple TV,OS=latest'
+        - project_path: $WORKSPACE_PATH
+        - xcodebuild_options: $BUILD_OPTIONS
+        title: Xcode Test for tvOS
+    - deploy-to-bitrise-io@2: {}
 meta:
   bitrise.io:
     stack: osx-xcode-13.3.x
@@ -91,3 +66,14 @@ trigger_map:
 - pull_request_source_branch: '*'
   pull_request_target_branch: main
   workflow: test
+app:
+  envs:
+  - BUILD_SCHEME: GIFImage
+    opts:
+      is_expand: true
+  - WORKSPACE_PATH: $BITRISE_SOURCE_DIR/.swiftpm/xcode/package.xcworkspace
+    opts:
+      is_expand: true
+  - BUILD_OPTIONS: '-enableCodeCoverage YES'
+    opts:
+      is_expand: true
