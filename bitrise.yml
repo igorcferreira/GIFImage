@@ -47,24 +47,37 @@ workflows:
             # debug log
             set -x
 
+            # Prepare environment
             swift package reset
 
             # Test macOS layer
-            swift test
+            swift test --parallel --xunit-output "${BITRISE_DEPLOY_DIR}/swift_test.xml"
 
             # Test iOS layer
             xcodebuild -workspace .swiftpm/xcode/package.xcworkspace \
             -scheme GIFImage \
+            -derivedDataPath "${BITRISE_SOURCE_DIR}/.tmp" \
             -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 8' \
-            build test
+            -parallel-testing-enabled \
+            -enableCodeCoverage \
+            -quiet \
+            build-for-testing test
 
             # Test tvOS layer
             xcodebuild -workspace .swiftpm/xcode/package.xcworkspace \
             -scheme GIFImage \
+            -derivedDataPath "${BITRISE_SOURCE_DIR}/.tmp" \
             -sdk appletvsimulator \
             -destination 'platform=tvOS Simulator,name=Apple TV' \
-            build test
+            -parallel-testing-enabled \
+            -enableCodeCoverage \
+            -quiet \
+            build-for-testing test
+            
+            find "${BITRISE_SOURCE_DIR}/.tmp" -name "*.xcresult" -exec cp -r {} "${BITRISE_DEPLOY_DIR}" \;
+            
+            rm -rf "${BITRISE_SOURCE_DIR}/.tmp"
     - deploy-to-bitrise-io@2: {}
 meta:
   bitrise.io:

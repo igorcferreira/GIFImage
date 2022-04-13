@@ -9,7 +9,7 @@ import XCTest
 import GIFImage
 
 extension Double {
-    func equal(_ value: Double, precise: Int) -> Bool {
+    func equal(_ value: Double, precise: Int = 10) -> Bool {
         let denominator: Double = pow(10.0, Double(precise))
         let maxDiff: Double = 1 / denominator
         let realDiff: Double = self - value
@@ -69,7 +69,7 @@ class ImageLoaderTests: XCTestCase {
 
         let (frameCount, duration) = try await sequence.reduce((0, 0.0)) { partial, frame in (partial.0 + 1, partial.1 + (frame.interval ?? 0.0)) }
         XCTAssertEqual(frameCount, testGIFFrameCount)
-        XCTAssertTrue(duration.equal(testGIFDuration, precise: 2), "\(duration) is not equal to \(testGIFDuration)")
+        XCTAssertTrue(duration.equal(testGIFDuration), "\(duration) is not equal to \(testGIFDuration)")
     }
 
     func testFileSourceLoading() async throws {
@@ -81,7 +81,7 @@ class ImageLoaderTests: XCTestCase {
 
         let (frameCount, duration) = try await sequence.reduce((0, 0.0)) { partial, frame in (partial.0 + 1, partial.1 + (frame.interval ?? 0.0)) }
         XCTAssertEqual(frameCount, testGIFFrameCount)
-        XCTAssertTrue(duration.equal(testGIFDuration, precise: 2), "\(duration) is not equal to \(testGIFDuration)")
+        XCTAssertTrue(duration.equal(testGIFDuration), "\(duration) is not equal to \(testGIFDuration)")
     }
 
     func testRemoteSourceLoading() async throws {
@@ -94,7 +94,7 @@ class ImageLoaderTests: XCTestCase {
 
         let (frameCount, duration) = try await sequence.reduce((0, 0.0)) { partial, frame in (partial.0 + 1, partial.1 + (frame.interval ?? 0.0)) }
         XCTAssertEqual(frameCount, testGIFFrameCount)
-        XCTAssertTrue(duration.equal(testGIFDuration, precise: 2), "\(duration) is not equal to \(testGIFDuration)")
+        XCTAssertTrue(duration.equal(testGIFDuration), "\(duration) is not equal to \(testGIFDuration)")
     }
 
     func testSequenceLoadAndPresentationTime() async throws {
