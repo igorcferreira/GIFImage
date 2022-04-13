@@ -57,14 +57,16 @@ workflows:
             -scheme GIFImage \
             -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 8' \
-            build test
+            -parallel-testing-enabled \
+            build-for-testing test
 
             # Test tvOS layer
             xcodebuild -workspace .swiftpm/xcode/package.xcworkspace \
             -scheme GIFImage \
             -sdk appletvsimulator \
             -destination 'platform=tvOS Simulator,name=Apple TV' \
-            build test
+            -parallel-testing-enabled \
+            build-for-testing test
     - deploy-to-bitrise-io@2: {}
 meta:
   bitrise.io:
