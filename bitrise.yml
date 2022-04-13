@@ -67,6 +67,13 @@ workflows:
         - project_path: $WORKSPACE_PATH
         - xcodebuild_options: $BUILD_OPTIONS
         title: Xcode Test for tvOS
+    - xcode-test@4:
+        inputs:
+        - scheme: $BUILD_SCHEME
+        - destination: 'platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest'
+        - project_path: $WORKSPACE_PATH
+        - xcodebuild_options: $BUILD_OPTIONS
+        title: Xcode Test for watchOS
     - deploy-to-bitrise-io@2: {}
 meta:
   bitrise.io:

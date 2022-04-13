@@ -5,7 +5,7 @@
 //  Created by Igor Ferreira on 05/04/2022.
 //
 
-import CoreImage
+import ImageIO
 import SwiftUI
 #if os(macOS)
 import AppKit

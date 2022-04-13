@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CoreImage
+import ImageIO
 
 extension Data {
     func imageAsyncSequence(loop: Bool) throws -> CGImageSourceFrameSequence {
