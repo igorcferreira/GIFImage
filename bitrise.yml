@@ -40,10 +40,18 @@ workflows:
             set -x
 
             # Prepare environment
+            # Creating the sub-directory for the test run within the BITRISE_TEST_RESULT_DIR:
+            OUTPUT_DIR="$BITRISE_TEST_RESULT_DIR/SwiftTest"
+            mkdir "$OUTPUT_DIR"
+            
+            # Reseting the package
             swift package reset
 
             # Test macOS layer
-            swift test --parallel --xunit-output "${BITRISE_DEPLOY_DIR}/swift_test.xml"
+            swift test --parallel --xunit-output "${OUTPUT_DIR}/UnitTest.xml"
+            
+            # Creating the test-info.json file with the name of the test run defined:
+            echo '{"test-name":"SwiftTest"}' >> "${OUTPUT_DIR}/test-info.json"
     - xcode-test@4:
         inputs:
         - scheme: $BUILD_SCHEME
