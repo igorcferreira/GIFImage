@@ -49,18 +49,17 @@ class ImageLoaderTests: XCTestCase {
     func testFailureIfURLCannotBeFound() async throws {
         let urlSession = MockedURLProtocol.buildTestSession()
         let fileManager = MockedFileManager()
+        let thrownError = URLError(.init(rawValue: 404))
 
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
 
+        MockedURLProtocol.register(.failure(thrownError), to: url)
+        
         do {
             _ = try await imageLoader.load(source: GIFSource.remote(url: url), loop: false)
             XCTFail("Sequence should throw error")
         } catch {
-            #if os(watchOS)
-            XCTAssertEqual((error as? URLError)?.code, URLError.Code.init(rawValue: -1001))
-            #else
-            XCTAssertEqual((error as? URLError)?.code, URLError.Code.badURL)
-            #endif
+            XCTAssertEqual((error as? URLError)?.code, thrownError.code)
         }
     }
 
