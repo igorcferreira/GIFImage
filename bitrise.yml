@@ -56,11 +56,13 @@ workflows:
             # Exporting result to artefacts
             cp "${OUTPUT_DIR}/UnitTest.xml" "${BITRISE_DEPLOY_DIR}/swift_test.xml"
     - xcode-test@4:
+        is_always_run: true
         inputs:
         - scheme: $BUILD_SCHEME
         - project_path: $WORKSPACE_PATH
         - xcodebuild_options: $BUILD_OPTIONS
     - xcode-test@4:
+        is_always_run: true
         inputs:
         - scheme: $BUILD_SCHEME
         - destination: 'platform=tvOS Simulator,name=Apple TV,OS=latest'
@@ -68,6 +70,7 @@ workflows:
         - xcodebuild_options: $BUILD_OPTIONS
         title: Xcode Test for tvOS
     - xcode-test@4:
+        is_always_run: true
         inputs:
         - scheme: $BUILD_SCHEME
         - destination: 'platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest'
