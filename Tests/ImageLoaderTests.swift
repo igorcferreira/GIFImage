@@ -54,7 +54,7 @@ class ImageLoaderTests: XCTestCase {
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
 
         MockedURLProtocol.register(.failure(thrownError), to: url)
-        
+
         do {
             _ = try await imageLoader.load(source: GIFSource.remote(url: url), loop: false)
             XCTFail("Sequence should throw error")
