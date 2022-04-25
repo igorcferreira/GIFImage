@@ -73,7 +73,7 @@ workflows:
         inputs:
         - scheme: GIFImageiOSTests
         - project_path: $WORKSPACE_PATH
-        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-ios-results-${BITRISE_SCHEME}.html"
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-ios.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - xcode-test@4:
         title: Xcode Test for tvOS
@@ -81,7 +81,7 @@ workflows:
         - scheme: GIFImageTvOSTests
         - destination: platform=tvOS Simulator,name=Apple TV,OS=latest
         - project_path: $WORKSPACE_PATH
-        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-tvos-results-${BITRISE_SCHEME}.html"
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-tvOS.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - xcode-test@4:
         title: Xcode Test for watchOS
@@ -89,6 +89,6 @@ workflows:
         - scheme: GIFImageWatchOSTests
         - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest
         - project_path: $WORKSPACE_PATH
-        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-watchos-results-${BITRISE_SCHEME}.html"
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-watchOS.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - deploy-to-bitrise-io@2: {}
