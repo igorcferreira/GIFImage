@@ -1,7 +1,26 @@
----
-format_version: '11'
-default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+format_version: "11"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: other
+app:
+  envs:
+  - BUILD_SCHEME: GIFImage
+    opts:
+      is_expand: true
+  - WORKSPACE_PATH: $BITRISE_SOURCE_DIR/.swiftpm/xcode/package.xcworkspace
+    opts:
+      is_expand: true
+  - BUILD_OPTIONS: -enableCodeCoverage YES
+    opts:
+      is_expand: true
+meta:
+  bitrise.io:
+    stack: osx-xcode-13.3.x
+trigger_map:
+- push_branch: main
+  workflow: build
+- pull_request_source_branch: '*'
+  pull_request_target_branch: main
+  workflow: test
 workflows:
   build:
     steps:
@@ -17,7 +36,6 @@ workflows:
             set -e
             # debug log
             set -x
-
             swift package reset
             swift build -v
     - deploy-to-bitrise-io@2: {}
@@ -38,63 +56,72 @@ workflows:
             set -e
             # debug log
             set -x
-
             # Prepare environment
             # Creating the sub-directory for the test run within the BITRISE_TEST_RESULT_DIR:
             OUTPUT_DIR="$BITRISE_TEST_RESULT_DIR/SwiftTest"
             mkdir "$OUTPUT_DIR"
-            
+
             # Reseting the package
             swift package reset
-
             # Test macOS layer
             swift test --parallel --xunit-output "${OUTPUT_DIR}/UnitTest.xml"
-            
+
             # Creating the test-info.json file with the name of the test run defined:
             echo '{"test-name":"SwiftTest"}' >> "${OUTPUT_DIR}/test-info.json"
-            
+
             # Exporting result to artefacts
             cp "${OUTPUT_DIR}/UnitTest.xml" "${BITRISE_DEPLOY_DIR}/swift_test.xml"
+    - script@1:
+        title: Xcode Test for macOS
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            OUTPUT_PATH="${BITRISE_DEPLOY_DIR}/macOS.xcresult"
+
+            xcodebuild \
+            "-workspace" "${BITRISE_SOURCE_DIR}/.swiftpm/xcode/package.xcworkspace" \
+            "-scheme" "${BUILD_SCHEME}" \
+            "-destination" "platform=macOS" \
+            "-enableCodeCoverage" "YES" \
+            "-resultBundlePath" "${OUTPUT_PATH}" \
+            "test"
+
+            envman add --key "MACOS_TEST_RESULT" --value "${OUTPUT_PATH}"
+
+            TEST_RUN_DIR="${BITRISE_TEST_RESULT_DIR}/macOSTest"
+            mkdir "${TEST_RUN_DIR}"
+
+            cp -r "${OUTPUT_PATH}" "${TEST_RUN_DIR}/macOS.xcresult"
+
+            echo '{"test-name":"macOSTest"}' >> "${TEST_RUN_DIR}/test-info.json"
     - xcode-test@4:
-        is_always_run: true
+        title: Xcode Test for iOS
         inputs:
         - scheme: $BUILD_SCHEME
         - project_path: $WORKSPACE_PATH
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-ios-results-${BITRISE_SCHEME}.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - xcode-test@4:
-        is_always_run: true
-        inputs:
-        - scheme: $BUILD_SCHEME
-        - destination: 'platform=tvOS Simulator,name=Apple TV,OS=latest'
-        - project_path: $WORKSPACE_PATH
-        - xcodebuild_options: $BUILD_OPTIONS
         title: Xcode Test for tvOS
-    - xcode-test@4:
-        is_always_run: true
         inputs:
         - scheme: $BUILD_SCHEME
-        - destination: 'platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest'
+        - destination: platform=tvOS Simulator,name=Apple TV,OS=latest
         - project_path: $WORKSPACE_PATH
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-tvos-results-${BITRISE_SCHEME}.html"
         - xcodebuild_options: $BUILD_OPTIONS
+    - xcode-test@4:
         title: Xcode Test for watchOS
+        inputs:
+        - scheme: $BUILD_SCHEME
+        - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest
+        - project_path: $WORKSPACE_PATH
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-watchos-results-${BITRISE_SCHEME}.html"
+        - xcodebuild_options: $BUILD_OPTIONS
     - deploy-to-bitrise-io@2: {}
-meta:
-  bitrise.io:
-    stack: osx-xcode-13.3.x
-trigger_map:
-- push_branch: main
-  workflow: build
-- pull_request_source_branch: '*'
-  pull_request_target_branch: main
-  workflow: test
-app:
-  envs:
-  - BUILD_SCHEME: GIFImage
-    opts:
-      is_expand: true
-  - WORKSPACE_PATH: $BITRISE_SOURCE_DIR/.swiftpm/xcode/package.xcworkspace
-    opts:
-      is_expand: true
-  - BUILD_OPTIONS: '-enableCodeCoverage YES'
-    opts:
-      is_expand: true
