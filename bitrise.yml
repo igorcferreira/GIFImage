@@ -17,11 +17,28 @@ meta:
     stack: osx-xcode-13.3.x
 trigger_map:
 - push_branch: main
-  workflow: test
+  workflow: build
 - pull_request_source_branch: '*'
   pull_request_target_branch: main
   workflow: test
 workflows:
+  build:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+    - script@1:
+        title: Build macos artefact
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            swift package reset
+            swift build -v
+    - deploy-to-bitrise-io@2: {}
   test:
     steps:
     - activate-ssh-key@4:
@@ -30,6 +47,30 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: $BITRISE_SOURCE_DIR
+    - script@1:
+        title: Run tests
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            # Prepare environment
+            # Creating the sub-directory for the test run within the BITRISE_TEST_RESULT_DIR:
+            OUTPUT_DIR="$BITRISE_TEST_RESULT_DIR/SwiftTest"
+            mkdir "$OUTPUT_DIR"
+
+            # Reseting the package
+            swift package reset
+            # Test macOS layer
+            swift test --parallel --xunit-output "${OUTPUT_DIR}/UnitTest.xml"
+
+            # Creating the test-info.json file with the name of the test run defined:
+            echo '{"test-name":"SwiftTest"}' >> "${OUTPUT_DIR}/test-info.json"
+
+            # Exporting result to artefacts
+            cp "${OUTPUT_DIR}/UnitTest.xml" "${BITRISE_DEPLOY_DIR}/swift_test.xml"
     - script@1:
         title: Xcode Test for macOS
         inputs:
@@ -65,6 +106,7 @@ workflows:
         inputs:
         - scheme: $BUILD_SCHEME
         - project_path: $WORKSPACE_PATH
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-ios-results-${BITRISE_SCHEME}.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - xcode-test@4:
         title: Xcode Test for tvOS
@@ -72,6 +114,7 @@ workflows:
         - scheme: $BUILD_SCHEME
         - destination: platform=tvOS Simulator,name=Apple TV,OS=latest
         - project_path: $WORKSPACE_PATH
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-tvos-results-${BITRISE_SCHEME}.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - xcode-test@4:
         title: Xcode Test for watchOS
@@ -79,5 +122,6 @@ workflows:
         - scheme: $BUILD_SCHEME
         - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest
         - project_path: $WORKSPACE_PATH
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-watchos-results-${BITRISE_SCHEME}.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - deploy-to-bitrise-io@2: {}
