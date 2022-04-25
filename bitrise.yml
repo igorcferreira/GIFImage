@@ -71,36 +71,6 @@ workflows:
 
             # Exporting result to artefacts
             cp "${OUTPUT_DIR}/UnitTest.xml" "${BITRISE_DEPLOY_DIR}/swift_test.xml"
-    - script@1:
-        title: Xcode Test for macOS
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
-            set -o pipefail
-            # debug log
-            set -x
-
-            OUTPUT_PATH="${BITRISE_DEPLOY_DIR}/macOS.xcresult"
-
-            xcodebuild \
-            "-workspace" "${BITRISE_SOURCE_DIR}/.swiftpm/xcode/package.xcworkspace" \
-            "-scheme" "${BUILD_SCHEME}" \
-            "-destination" "platform=macOS" \
-            "-enableCodeCoverage" "YES" \
-            "-resultBundlePath" "${OUTPUT_PATH}" \
-            "test"
-
-            envman add --key "MACOS_TEST_RESULT" --value "${OUTPUT_PATH}"
-
-            TEST_RUN_DIR="${BITRISE_TEST_RESULT_DIR}/macOSTest"
-            mkdir "${TEST_RUN_DIR}"
-
-            cp -r "${OUTPUT_PATH}" "${TEST_RUN_DIR}/macOS.xcresult"
-
-            echo '{"test-name":"macOSTest"}' >> "${TEST_RUN_DIR}/test-info.json"
     - xcode-test@4:
         title: Xcode Test for iOS
         inputs:
