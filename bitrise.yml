@@ -61,13 +61,17 @@ workflows:
             # Reseting the package
             swift package reset
             # Test macOS layer
-            swift test --parallel --xunit-output "${OUTPUT_DIR}/UnitTest.xml"
+            swift test --enable-code-coverage --parallel --xunit-output "${OUTPUT_DIR}/UnitTest.xml"
+
+            # Copy code coverage
+            cp "$(swift test --show-codecov-path)" "${OUTPUT_DIR}/codecov.json"
 
             # Creating the test-info.json file with the name of the test run defined:
             echo '{"test-name":"SwiftTest"}' >> "${OUTPUT_DIR}/test-info.json"
 
             # Exporting result to artefacts
             cp "${OUTPUT_DIR}/UnitTest.xml" "${BITRISE_DEPLOY_DIR}/swift_test.xml"
+            cp "${OUTPUT_DIR}/codecov.json" "${BITRISE_DEPLOY_DIR}/codecov.json"
     - xcode-test@4:
         title: Xcode Test for iOS
         inputs:
