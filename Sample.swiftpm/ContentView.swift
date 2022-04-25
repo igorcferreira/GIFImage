@@ -11,7 +11,7 @@ import GIFImage
 struct ListItem: Identifiable {
     let id: UUID
     let source: GIFSource
-    
+
     init(_ source: GIFSource) {
         self.id = UUID()
         self.source = source
@@ -19,13 +19,13 @@ struct ListItem: Identifiable {
 }
 
 struct ContentView: View {
-    
+
     @State var items = [
         ListItem(.remote(url: URL(string: "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif")!)),
         ListItem(.local(filePath: Bundle.main.path(forResource: "test", ofType: "gif")!))
     ]
     @State var placeholder = UIImage(systemName: "photo.circle.fill")!
-    @State var error: UIImage? = nil
+    @State var error: UIImage?
 
     var body: some View {
         List(items) { item in

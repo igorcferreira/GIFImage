@@ -24,7 +24,7 @@ let package = Package(
         .testTarget(
             name: "GIFImageTests",
             dependencies: [
-                "GIFImage",
+                "GIFImage"
             ],
             path: "Tests",
             resources: [
