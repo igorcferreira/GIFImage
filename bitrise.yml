@@ -3,9 +3,6 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: other
 app:
   envs:
-  - BUILD_SCHEME: GIFImage
-    opts:
-      is_expand: true
   - WORKSPACE_PATH: $BITRISE_SOURCE_DIR/.swiftpm/xcode/package.xcworkspace
     opts:
       is_expand: true
@@ -74,14 +71,14 @@ workflows:
     - xcode-test@4:
         title: Xcode Test for iOS
         inputs:
-        - scheme: $BUILD_SCHEME
+        - scheme: GIFImageiOSTests
         - project_path: $WORKSPACE_PATH
         - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-ios-results-${BITRISE_SCHEME}.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - xcode-test@4:
         title: Xcode Test for tvOS
         inputs:
-        - scheme: $BUILD_SCHEME
+        - scheme: GIFImageTvOSTests
         - destination: platform=tvOS Simulator,name=Apple TV,OS=latest
         - project_path: $WORKSPACE_PATH
         - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-tvos-results-${BITRISE_SCHEME}.html"
@@ -89,7 +86,7 @@ workflows:
     - xcode-test@4:
         title: Xcode Test for watchOS
         inputs:
-        - scheme: $BUILD_SCHEME
+        - scheme: GIFImageWatchOSTests
         - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest
         - project_path: $WORKSPACE_PATH
         - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-watchos-results-${BITRISE_SCHEME}.html"
