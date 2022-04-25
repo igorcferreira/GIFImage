@@ -10,14 +10,30 @@ import ImageIO
 
 public struct CGImageSourceFrameSequence: AsyncSequence {
     public typealias Element = ImageFrame
+    
+    public enum LoadError: Error {
+        case invalidData
+        case emptyData
+    }
 
     public let source: CGImageSource
     public let loop: Bool
 
-    public init?(data: Data, loop: Bool) {
+    public init(data: Data, loop: Bool) throws {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
-            return nil
+            throw LoadError.invalidData
         }
+        
+        switch (CGImageSourceGetStatus(source)) {
+        case .statusComplete: break
+        case .statusReadingHeader: break
+        case .statusIncomplete: throw LoadError.emptyData
+        case .statusInvalidData: throw LoadError.invalidData
+        case .statusUnexpectedEOF: throw LoadError.invalidData
+        case .statusUnknownType: throw LoadError.invalidData
+        @unknown default: throw LoadError.invalidData
+        }
+        
         self.init(source: source, loop: loop)
     }
 

@@ -114,5 +114,46 @@ class ImageLoaderTests: XCTestCase {
             }
         }
     }
+    
+    func testNonGifLoading() async throws {
+        let nonGifPath = Bundle.module.path(forResource: "non_gif", ofType: "jpg")!
+        let nonGifData = FileManager.default.contents(atPath: nonGifPath)!
+        let urlSession = MockedURLProtocol.buildTestSession()
+        let fileManager = MockedFileManager()
+        let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
+        
+        let sequence = try await imageLoader.load(source: GIFSource.static(data: nonGifData), loop: false)
+        let frameCount = try await sequence.reduce(0) { partial, _ in partial + 1 }
+        XCTAssertEqual(frameCount, 1)
+    }
+    
+    func testEmptyData() async throws {
+        let invalidData = Data()
+        let urlSession = MockedURLProtocol.buildTestSession()
+        let fileManager = MockedFileManager()
+        let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
+        
+        do {
+            let _ = try await imageLoader.load(source: GIFSource.static(data: invalidData), loop: false)
+            XCTFail("Image Loader should fail for empty data")
+        } catch {
+            XCTAssertEqual(error as? CGImageSourceFrameSequence.LoadError, .invalidData)
+        }
+    }
+    
+    func testInvalidFormatData() async throws {
+        let nonImagePath = Bundle.module.path(forResource: "TextFile", ofType: "md")!
+        let nonImageData = FileManager.default.contents(atPath: nonImagePath)!
+        let urlSession = MockedURLProtocol.buildTestSession()
+        let fileManager = MockedFileManager()
+        let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
+        
+        do {
+            let _ = try await imageLoader.load(source: GIFSource.static(data: nonImageData), loop: false)
+            XCTFail("Image Loader should fail for invalid format")
+        } catch {
+            XCTAssertEqual(error as? CGImageSourceFrameSequence.LoadError, .invalidData)
+        }
+    }
 
 }

@@ -41,8 +41,4 @@ public struct CGImageSourceIterator: AsyncIteratorProtocol {
         currentFrame += 1
         return frame
     }
-
-    public mutating func reset() {
-        currentFrame = 0
-    }
 }

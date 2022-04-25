@@ -28,7 +28,9 @@ let package = Package(
             ],
             path: "Tests",
             resources: [
-                .process("test.gif")
+                .process("test.gif"),
+                .process("non_gif.jpg"),
+                .process("TextFile.md")
             ]
         )
     ]

@@ -10,9 +10,7 @@ import ImageIO
 
 extension Data {
     func imageAsyncSequence(loop: Bool) throws -> CGImageSourceFrameSequence {
-        guard let sequence = CGImageSourceFrameSequence(data: self, loop: loop) else {
-            throw URLError(.cannotDecodeContentData)
-        }
+        let sequence = try CGImageSourceFrameSequence(data: self, loop: loop)
         return sequence
     }
 }

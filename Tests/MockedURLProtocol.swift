@@ -26,6 +26,8 @@ final class MockedURLProtocol: URLProtocol {
     static func buildTestSession() -> URLSession {
         let baseConfiguration = URLSessionConfiguration.default
         baseConfiguration.protocolClasses = [MockedURLProtocol.self] + (baseConfiguration.protocolClasses ?? [])
+        baseConfiguration.timeoutIntervalForRequest = 1.0
+        baseConfiguration.timeoutIntervalForResource = 1.0
         return URLSession(configuration: baseConfiguration)
     }
 
