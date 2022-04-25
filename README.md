@@ -62,6 +62,10 @@ GIFImage.init(
 
 The project has a struct named `ImageLoader` that is responsible for parsing the source into a sequence of frames (later used in the view). This loader has a local cache using `URLCache`. The view will fetch the image loader from the view environment. So, if a different cache limits or file manager wants to be used, the `\.imageLoader` environment key can be used to override the default instance.
 
+## Sample Project
+
+A sample project can be found as a Swift Playground app on [Sample.swiftpm](Sample.swiftpm). This playground app is configured with the GIFImage package as a local dependency for better development/test, to run it on iPad's Playground app, the package reference may need to be updated.
+
 ## License
 
 [MIT](LICENSE)
