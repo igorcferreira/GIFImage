@@ -10,7 +10,7 @@ import ImageIO
 
 public struct CGImageSourceFrameSequence: AsyncSequence {
     public typealias Element = ImageFrame
-    
+
     public enum LoadError: Error {
         case invalidData
         case emptyData
@@ -23,8 +23,8 @@ public struct CGImageSourceFrameSequence: AsyncSequence {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
             throw LoadError.invalidData
         }
-        
-        switch (CGImageSourceGetStatus(source)) {
+
+        switch CGImageSourceGetStatus(source) {
         case .statusComplete: break
         case .statusReadingHeader: break
         case .statusIncomplete: throw LoadError.emptyData
@@ -33,7 +33,7 @@ public struct CGImageSourceFrameSequence: AsyncSequence {
         case .statusUnknownType: throw LoadError.invalidData
         @unknown default: throw LoadError.invalidData
         }
-        
+
         self.init(source: source, loop: loop)
     }
 
