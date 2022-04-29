@@ -1,4 +1,10 @@
-line_length: 150
+disabled_rules:
+  - trailing_whitespace
+
+line_length:
+  warning: 150
+  ignores_comments: true
+
 excluded:
   - .build
   - .swiftpm
