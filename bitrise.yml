@@ -44,34 +44,11 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: $BITRISE_SOURCE_DIR
-    - script@1:
+    - git::https://github.com/igorcferreira/bitrise-step-run-swift-test.git@main:
         title: Run tests
         inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-            # Prepare environment
-            # Creating the sub-directory for the test run within the BITRISE_TEST_RESULT_DIR:
-            OUTPUT_DIR="$BITRISE_TEST_RESULT_DIR/SwiftTest"
-            mkdir "$OUTPUT_DIR"
-
-            # Reseting the package
-            swift package reset
-            # Test macOS layer
-            swift test --enable-code-coverage --parallel --xunit-output "${OUTPUT_DIR}/UnitTest.xml"
-
-            # Copy code coverage
-            cp "$(swift test --show-codecov-path)" "${OUTPUT_DIR}/codecov.json"
-
-            # Creating the test-info.json file with the name of the test run defined:
-            echo '{"test-name":"SwiftTest"}' >> "${OUTPUT_DIR}/test-info.json"
-
-            # Exporting result to artefacts
-            cp "${OUTPUT_DIR}/UnitTest.xml" "${BITRISE_DEPLOY_DIR}/swift_test.xml"
-            cp "${OUTPUT_DIR}/codecov.json" "${BITRISE_DEPLOY_DIR}/codecov.json"
+        - TEST_NAME: SwiftTest
+        - PROJECT_DIR: $BITRISE_SOURCE_DIR
     - xcode-test@4:
         title: Xcode Test for iOS
         inputs:
