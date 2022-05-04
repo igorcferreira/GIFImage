@@ -44,7 +44,7 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: $BITRISE_SOURCE_DIR
-    - git::https://github.com/igorcferreira/bitrise-step-run-swift-test.git@main:
+    - git::https://github.com/igorcferreira/bitrise-step-run-spm-test-with-coverage.git@main:
         title: Run tests
         inputs:
         - TEST_NAME: SwiftTest
