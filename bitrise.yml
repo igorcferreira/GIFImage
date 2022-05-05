@@ -48,32 +48,29 @@ workflows:
         inputs:
         - linting_path: $BITRISE_SOURCE_DIR
     - git::https://github.com/igorcferreira/bitrise-step-run-spm-test-with-coverage.git@main:
-        title: Run tests
+        title: Run macOS tests
         inputs:
-        - TEST_NAME: SwiftTest
+        - TEST_NAME: xcode-test-results-macos
         - PROJECT_DIR: $BITRISE_SOURCE_DIR
-    - xcode-test@4:
-        title: Xcode Test for iOS
+    - git::https://github.com/igorcferreira/bitrise-step-run-spm-test-with-coverage.git@main:
+        title: Run iOS tests
         inputs:
-        - scheme: $BITRISE_SCHEME
-        - destination: platform=iOS Simulator,name=iPhone 8,OS=latest
-        - project_path: $WORKSPACE_PATH
-        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-ios.html"
-        - xcodebuild_options: $BUILD_OPTIONS
-    - xcode-test@4:
-        title: Xcode Test for tvOS
+        - TEST_NAME: xcode-test-results-ios
+        - PROJECT_DIR: $BITRISE_SOURCE_DIR
+        - SDK: iphonesimulator
+        - DESTINATION: 'platform=iOS Simulator,name=iPhone 8 Plus'
+    - git::https://github.com/igorcferreira/bitrise-step-run-spm-test-with-coverage.git@main:
+        title: Run tvOS tests
         inputs:
-        - scheme: $BITRISE_SCHEME
-        - destination: platform=tvOS Simulator,name=Apple TV,OS=latest
-        - project_path: $WORKSPACE_PATH
-        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-tvOS.html"
-        - xcodebuild_options: $BUILD_OPTIONS
-    - xcode-test@4:
-        title: Xcode Test for watchOS
+        - TEST_NAME: xcode-test-results-tvos
+        - PROJECT_DIR: $BITRISE_SOURCE_DIR
+        - SDK: appletvsimulator
+        - DESTINATION: 'platform=tvOS Simulator,name=Apple TV'
+    - git::https://github.com/igorcferreira/bitrise-step-run-spm-test-with-coverage.git@main:
+        title: Run watchOS tests
         inputs:
-        - scheme: $BITRISE_SCHEME
-        - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest
-        - project_path: $WORKSPACE_PATH
-        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-watchOS.html"
-        - xcodebuild_options: $BUILD_OPTIONS
+        - TEST_NAME: xcode-test-results-watchos
+        - PROJECT_DIR: $BITRISE_SOURCE_DIR
+        - SDK: watchsimulator
+        - DESTINATION: 'platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm'
     - deploy-to-bitrise-io@2: {}
