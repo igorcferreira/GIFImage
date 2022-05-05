@@ -9,6 +9,9 @@ app:
   - BUILD_OPTIONS: -enableCodeCoverage YES
     opts:
       is_expand: true
+  - BITRISE_SCHEME: GIFImage
+    opts:
+      is_expand: true
 meta:
   bitrise.io:
     stack: osx-xcode-13.3.x
@@ -52,14 +55,15 @@ workflows:
     - xcode-test@4:
         title: Xcode Test for iOS
         inputs:
-        - scheme: GIFImageiOSTests
+        - scheme: $BITRISE_SCHEME
+        - destination: platform=iOS Simulator,name=iPhone 8,OS=latest
         - project_path: $WORKSPACE_PATH
         - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-ios.html"
         - xcodebuild_options: $BUILD_OPTIONS
     - xcode-test@4:
         title: Xcode Test for tvOS
         inputs:
-        - scheme: GIFImageTvOSTests
+        - scheme: $BITRISE_SCHEME
         - destination: platform=tvOS Simulator,name=Apple TV,OS=latest
         - project_path: $WORKSPACE_PATH
         - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-tvOS.html"
@@ -67,7 +71,7 @@ workflows:
     - xcode-test@4:
         title: Xcode Test for watchOS
         inputs:
-        - scheme: GIFImageWatchOSTests
+        - scheme: $BITRISE_SCHEME
         - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=latest
         - project_path: $WORKSPACE_PATH
         - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-watchOS.html"
