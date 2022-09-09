@@ -9,6 +9,7 @@ import AppleProductTypes
 
 let package = Package(
     name: "Sample",
+    defaultLocalization: "en",
     platforms: [
         .iOS("15.0")
     ],
@@ -32,11 +33,15 @@ let package = Package(
                 .landscapeRight,
                 .portraitUpsideDown(.when(deviceFamilies: [.pad]))
             ],
+            capabilities: [
+                .outgoingNetworkConnections(),
+                .fileAccess(.userSelectedFiles, mode: .readOnly)
+            ],
             appCategory: .developerTools
         )
     ],
     dependencies: [
-        .package(name: "GIFImage", path: "..")
+        .package(name: "GIFImage", path: "/Users/igor/Developer/GIFImage")
     ],
     targets: [
         .executableTarget(
