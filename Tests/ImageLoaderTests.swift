@@ -51,7 +51,7 @@ class ImageLoaderTests: XCTestCase {
         let fileManager = MockedFileManager()
         let thrownError = URLError(.init(rawValue: 404))
 
-        let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
+        let imageLoader = ImageLoader(session: urlSession, cache: URLCache(memoryCapacity: 0, diskCapacity: 0), fileManager: fileManager)
 
         MockedURLProtocol.register(.failure(thrownError), to: url)
 
