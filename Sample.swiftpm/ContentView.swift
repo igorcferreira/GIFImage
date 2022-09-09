@@ -34,8 +34,14 @@ struct ContentView: View {
                 loop: true,
                 placeholder: placeholder,
                 errorImage: error,
-                frameRate: .dynamic
+                frameRate: .dynamic,
+                loopAction: loopAction(source:)
             ).frame(width: 310.0, height: 175.0, alignment: .center)
         }
+    }
+    
+    @MainActor
+    @Sendable private func loopAction(source: GIFSource) async {
+        print("Loop for source: \(source)")
     }
 }
