@@ -56,7 +56,8 @@ GIFImage.init(
     loop: Bool = true,
     placeholder: RawImage = RawImage(),
     errorImage: RawImage? = nil,
-    frameRate: FrameRate = .dynamic
+    frameRate: FrameRate = .dynamic,
+    loopAction: @Sendable @escaping (GIFSource) async throws -> Void = { _ in }
 )
 ```
 
