@@ -7,15 +7,16 @@ private let kDefaultGIFFrameInterval: TimeInterval = 1.0 / 24.0
 /// to convert the fetch the `Data`
 public struct GIFImage: View {
 
-    private let action: (GIFSource) async throws -> Void
+    
     public let source: GIFSource
+    public let loop: Bool
     public let placeholder: RawImage
     public let errorImage: RawImage?
     public let frameRate: FrameRate
+    private let action: (GIFSource) async throws -> Void
 
     @Environment(\.imageLoader) var imageLoader
     @State private var frame: RawImage?
-    @State public var loop: Bool = true
 
     /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
     /// into frames and stream them based in the "Delay" key packaged on which frame item.
@@ -36,11 +37,11 @@ public struct GIFImage: View {
         loopAction: @Sendable @escaping (GIFSource) async throws -> Void = { _ in }
     ) {
         self.source = source
+        self.loop = loop
         self.placeholder = placeholder
         self.errorImage = errorImage
         self.frameRate = frameRate
         self.action = loopAction
-        self.loop = loop
     }
 
     public var body: some View {
@@ -53,12 +54,12 @@ public struct GIFImage: View {
     @Sendable
     private func load() async {
         do {
-            while(self.loop) {
+            repeat {
                 for try await imageFrame in try await imageLoader.load(source: source) {
                     try await update(imageFrame)
                 }
                 try await action(source)
-            }
+            } while(self.loop)
         } catch {
             frame = errorImage ?? placeholder
         }
@@ -93,7 +94,7 @@ struct GIFImage_Previews: PreviewProvider {
                 .frame(width: 350.0, height: 197.0, alignment: .center)
             GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .limited(fps: 5))
                 .frame(width: 350.0, height: 197.0, alignment: .center)
-            GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .static(fps: 30))
+            GIFImage(url: gifURL, loop: false, placeholder: placeholder, errorImage: error, frameRate: .static(fps: 30))
                 .frame(width: 350.0, height: 197.0, alignment: .center)
         }
     }
