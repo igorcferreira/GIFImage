@@ -56,15 +56,18 @@ workflows:
         title: iOS Tests
         inputs:
         - project_path: $BITRISE_SOURCE_DIR/Package.swift
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-iOS.html"
         - destination: platform=iOS Simulator,name=iPhone 8 Plus
     - xcode-test@4:
         title: watchOS Tests
         inputs:
         - project_path: $BITRISE_SOURCE_DIR/Package.swift
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-watchOS.html"
         - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=8.5
     - xcode-test@4:
         title: tvOS Tests
         inputs:
         - project_path: $BITRISE_SOURCE_DIR/Package.swift
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-tvOS.html"
         - destination: platform=tvOS Simulator,name=Apple TV
     - deploy-to-bitrise-io@2: {}
