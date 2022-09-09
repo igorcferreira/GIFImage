@@ -13,7 +13,7 @@ public struct GIFImage: View {
     private let action: (GIFSource) async throws -> Void
 
     @Environment(\.imageLoader) var imageLoader
-    @State private var frame: RawImage?
+    @State @MainActor private var frame: RawImage?
     @Binding public var loop: Bool
     @State private var presentationTask: Task<(), Never>? = nil
 
