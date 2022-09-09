@@ -61,6 +61,7 @@ private extension URL {
         guard httpResponse.isSuccess else {
             throw URLError(.init(rawValue: httpResponse.statusCode))
         }
+        cache.storeCachedResponse(CachedURLResponse(response: response, data: data), for: request)
         return data
     }
 }
