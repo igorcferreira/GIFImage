@@ -13,9 +13,8 @@ public struct GIFImage: View {
     @State @MainActor private var frame: RawImage?
     @Binding public var loop: Bool
     @Binding public var animate: Bool
-    @State private var presentationTask: Task<(), Never>? = nil
+    @State private var presentationTask: Task<(), Never>?
 
-    
     /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
     /// into frames and stream them based in the "Delay" key packaged on which frame item.
     ///
@@ -91,8 +90,11 @@ public struct GIFImage: View {
     }
 
     private func handle(animate: Bool) {
-        if animate { load() }
-        else { presentationTask?.cancel() }
+        if animate {
+            load()
+        } else {
+            presentationTask?.cancel()
+        }
     }
     
     private func handle(loop: Bool) {

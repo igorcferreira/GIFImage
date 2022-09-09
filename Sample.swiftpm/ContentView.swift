@@ -57,7 +57,7 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Preview: PreviewProvider {
+struct ContentViewPreviews: PreviewProvider {
     static var previews: some View {
         Group {
             ContentView()
