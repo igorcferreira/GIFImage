@@ -1,7 +1,5 @@
 import SwiftUI
 
-private let kDefaultGIFFrameInterval: TimeInterval = 1.0 / 24.0
-
 /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
 /// into frames and stream them based in the "Delay" key packaged on which frame item. The view will use the `ImageLoader` from the environment
 /// to convert the fetch the `Data`
@@ -9,8 +7,7 @@ public struct GIFImage: View {
     public let source: GIFSource
     public let placeholder: RawImage
     public let errorImage: RawImage?
-    public let frameRate: FrameRate
-    private let action: (GIFSource) async throws -> Void
+    private let presentationController: PresentationController
 
     @Environment(\.imageLoader) var imageLoader
     @State @MainActor private var frame: RawImage?
@@ -74,8 +71,14 @@ public struct GIFImage: View {
         self._loop = loop
         self.placeholder = placeholder
         self.errorImage = errorImage
-        self.frameRate = frameRate
-        self.action = loopAction
+        
+        self.presentationController = PresentationController(
+            source: source,
+            frameRate: frameRate,
+            animate: animate,
+            loop: loop,
+            action: loopAction
+        )
     }
 
     public var body: some View {
@@ -97,39 +100,12 @@ public struct GIFImage: View {
     }
     
     @Sendable private func load() {
-        guard animate else { return }
         presentationTask?.cancel()
-        presentationTask = Task {
-            do {
-                repeat {
-                    for try await imageFrame in try await imageLoader.load(source: source) {
-                        try await update(imageFrame)
-                        if !animate { break }
-                    }
-                    try await action(source)
-                } while(self.loop && self.animate)
-            } catch {
-                if !(error is CancellationError) {
-                    await setFrame(errorImage ?? placeholder)
-                }
-            }
-        }
-    }
-
-    @Sendable private func update(_ imageFrame: ImageFrame) async throws {
-        await setFrame(RawImage.create(with: imageFrame.image))
-        let calculatedInterval = imageFrame.interval ?? kDefaultGIFFrameInterval
-        let interval: Double
-        switch frameRate {
-        case .static(let fps):
-            interval = (1.0 / Double(fps))
-        case .limited(let fps):
-            let intervalLimit = (1.0 / Double(fps))
-            interval = max(calculatedInterval, intervalLimit)
-        case .dynamic:
-            interval = imageFrame.interval ?? kDefaultGIFFrameInterval
-        }
-        try await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000.0))
+        presentationTask = Task { await presentationController.start(
+            imageLoader: imageLoader,
+            fallbackImage: errorImage ?? placeholder,
+            frameUpdate: setFrame(_:)
+        )}
     }
     
     @MainActor
