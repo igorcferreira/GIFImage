@@ -17,7 +17,13 @@ struct PresentationController {
     @Binding var animate: Bool
     @Binding var loop: Bool
     
-    init(source: GIFSource, frameRate: FrameRate, animate: Binding<Bool>, loop: Binding<Bool>, action: @Sendable @escaping (GIFSource) async throws -> Void = { _ in }) {
+    init(
+        source: GIFSource,
+        frameRate: FrameRate,
+        animate: Binding<Bool>,
+        loop: Binding<Bool>,
+        action: @Sendable @escaping (GIFSource) async throws -> Void = { _ in }
+    ) {
         self.source = source
         self.action = action
         self.frameRate = frameRate

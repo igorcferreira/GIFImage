@@ -52,25 +52,22 @@ workflows:
         inputs:
         - TEST_NAME: xcode-test-results-macos
         - PROJECT_DIR: $BITRISE_SOURCE_DIR
-    - git::https://github.com/igorcferreira/bitrise-step-run-spm-test-with-coverage.git@main:
-        title: Run iOS tests
+    - xcode-test@4:
+        title: iOS Tests
         inputs:
-        - TEST_NAME: xcode-test-results-ios
-        - PROJECT_DIR: $BITRISE_SOURCE_DIR
-        - SDK: iphonesimulator
-        - DESTINATION: 'platform=iOS Simulator,name=iPhone 8 Plus'
-    - git::https://github.com/igorcferreira/bitrise-step-run-spm-test-with-coverage.git@main:
-        title: Run tvOS tests
+        - project_path: $BITRISE_SOURCE_DIR/Package.swift
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-iOS.html"
+        - destination: platform=iOS Simulator,name=iPhone 8 Plus
+    - xcode-test@4:
+        title: watchOS Tests
         inputs:
-        - TEST_NAME: xcode-test-results-tvos
-        - PROJECT_DIR: $BITRISE_SOURCE_DIR
-        - SDK: appletvsimulator
-        - DESTINATION: 'platform=tvOS Simulator,name=Apple TV'
-    - git::https://github.com/igorcferreira/bitrise-step-run-spm-test-with-coverage.git@main:
-        title: Run watchOS tests
+        - project_path: $BITRISE_SOURCE_DIR/Package.swift
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-watchOS.html"
+        - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=8.5
+    - xcode-test@4:
+        title: tvOS Tests
         inputs:
-        - TEST_NAME: xcode-test-results-watchos
-        - PROJECT_DIR: $BITRISE_SOURCE_DIR
-        - SDK: watchsimulator
-        - DESTINATION: 'platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm'
+        - project_path: $BITRISE_SOURCE_DIR/Package.swift
+        - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-tvOS.html"
+        - destination: platform=tvOS Simulator,name=Apple TV
     - deploy-to-bitrise-io@2: {}
