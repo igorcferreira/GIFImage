@@ -17,12 +17,14 @@ public extension GIFImage {
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
     ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
+    ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     init?(
         url: String,
         loop: Bool = true,
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
-        frameRate: FrameRate = .dynamic
+        frameRate: FrameRate = .dynamic,
+        loopAction: @Sendable @escaping (GIFSource) async throws -> Void = { _ in }
     ) {
         guard let resolvedURL = URL(string: url) else {
             return nil
@@ -32,7 +34,8 @@ public extension GIFImage {
             loop: loop,
             placeholder: placeholder,
             errorImage: errorImage,
-            frameRate: frameRate
+            frameRate: frameRate,
+            loopAction: loopAction
         )
     }
 
@@ -45,19 +48,22 @@ public extension GIFImage {
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
     ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
+    ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     init(
         url: URL,
         loop: Bool = true,
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
-        frameRate: FrameRate = .dynamic
+        frameRate: FrameRate = .dynamic,
+        loopAction: @Sendable @escaping (GIFSource) async throws -> Void = { _ in }
     ) {
         self.init(
             source: GIFSource.remote(url: url),
             loop: loop,
             placeholder: placeholder,
             errorImage: errorImage,
-            frameRate: frameRate
+            frameRate: frameRate,
+            loopAction: loopAction
         )
     }
 }

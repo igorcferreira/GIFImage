@@ -9,8 +9,7 @@ import Foundation
 import ImageIO
 
 extension Data {
-    func imageAsyncSequence(loop: Bool) throws -> CGImageSourceFrameSequence {
-        let sequence = try CGImageSourceFrameSequence(data: self, loop: loop)
-        return sequence
+    func imageAsyncSequence() throws -> CGImageSourceFrameSequence {
+        return try CGImageSourceFrameSequence(data: self)
     }
 }

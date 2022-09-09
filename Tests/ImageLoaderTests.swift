@@ -56,7 +56,7 @@ class ImageLoaderTests: XCTestCase {
         MockedURLProtocol.register(.failure(thrownError), to: url)
 
         do {
-            _ = try await imageLoader.load(source: GIFSource.remote(url: url), loop: false)
+            _ = try await imageLoader.load(source: GIFSource.remote(url: url))
             XCTFail("Sequence should throw error")
         } catch {
             XCTAssertEqual((error as? URLError)?.code, thrownError.code)
@@ -68,7 +68,7 @@ class ImageLoaderTests: XCTestCase {
         let fileManager = MockedFileManager()
 
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
-        let sequence = try await imageLoader.load(source: GIFSource.static(data: gifData), loop: false)
+        let sequence = try await imageLoader.load(source: GIFSource.static(data: gifData))
 
         let (frameCount, duration) = try await sequence.reduce((0, 0.0)) { partial, frame in (partial.0 + 1, partial.1 + (frame.interval ?? 0.0)) }
         XCTAssertEqual(frameCount, testGIFFrameCount)
@@ -80,7 +80,7 @@ class ImageLoaderTests: XCTestCase {
         let fileManager = FileManager.default
 
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
-        let sequence = try await imageLoader.load(source: GIFSource.local(filePath: gifPath), loop: false)
+        let sequence = try await imageLoader.load(source: GIFSource.local(filePath: gifPath))
 
         let (frameCount, duration) = try await sequence.reduce((0, 0.0)) { partial, frame in (partial.0 + 1, partial.1 + (frame.interval ?? 0.0)) }
         XCTAssertEqual(frameCount, testGIFFrameCount)
@@ -93,7 +93,7 @@ class ImageLoaderTests: XCTestCase {
         MockedURLProtocol.register(.success(gifData), to: url)
 
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
-        let sequence = try await imageLoader.load(source: GIFSource.remote(url: url), loop: false)
+        let sequence = try await imageLoader.load(source: GIFSource.remote(url: url))
 
         let (frameCount, duration) = try await sequence.reduce((0, 0.0)) { partial, frame in (partial.0 + 1, partial.1 + (frame.interval ?? 0.0)) }
         XCTAssertEqual(frameCount, testGIFFrameCount)
@@ -108,7 +108,7 @@ class ImageLoaderTests: XCTestCase {
 
         measure {
             Task {
-                let sequence = try await imageLoader.load(source: GIFSource.static(data: gifData), loop: false)
+                let sequence = try await imageLoader.load(source: GIFSource.static(data: gifData))
                 let frameCount = try await sequence.reduce(0) { partial, _ in partial + 1 }
                 XCTAssertEqual(frameCount, testGIFFrameCount)
             }
@@ -122,7 +122,7 @@ class ImageLoaderTests: XCTestCase {
         let fileManager = MockedFileManager()
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
 
-        let sequence = try await imageLoader.load(source: GIFSource.static(data: nonGifData), loop: false)
+        let sequence = try await imageLoader.load(source: GIFSource.static(data: nonGifData))
         let frameCount = try await sequence.reduce(0) { partial, _ in partial + 1 }
         XCTAssertEqual(frameCount, 1)
     }
@@ -134,7 +134,7 @@ class ImageLoaderTests: XCTestCase {
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
 
         do {
-            _ = try await imageLoader.load(source: GIFSource.static(data: invalidData), loop: false)
+            _ = try await imageLoader.load(source: GIFSource.static(data: invalidData))
             XCTFail("Image Loader should fail for empty data")
         } catch {
             XCTAssertEqual(error as? CGImageSourceFrameSequence.LoadError, .invalidData)
@@ -149,7 +149,7 @@ class ImageLoaderTests: XCTestCase {
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
 
         do {
-            _ = try await imageLoader.load(source: GIFSource.static(data: nonImageData), loop: false)
+            _ = try await imageLoader.load(source: GIFSource.static(data: nonImageData))
             XCTFail("Image Loader should fail for invalid format")
         } catch {
             XCTAssertEqual(error as? CGImageSourceFrameSequence.LoadError, .invalidData)

@@ -17,9 +17,8 @@ public struct CGImageSourceFrameSequence: AsyncSequence {
     }
 
     public let source: CGImageSource
-    public let loop: Bool
 
-    public init(data: Data, loop: Bool) throws {
+    public init(data: Data) throws {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
             throw LoadError.invalidData
         }
@@ -34,15 +33,14 @@ public struct CGImageSourceFrameSequence: AsyncSequence {
         @unknown default: throw LoadError.invalidData
         }
 
-        self.init(source: source, loop: loop)
+        self.init(source: source)
     }
 
-    public init(source: CGImageSource, loop: Bool) {
+    public init(source: CGImageSource) {
         self.source = source
-        self.loop = loop
     }
 
     public func makeAsyncIterator() -> CGImageSourceIterator {
-        CGImageSourceIterator(source: source, loop: loop)
+        CGImageSourceIterator(source: source)
     }
 }

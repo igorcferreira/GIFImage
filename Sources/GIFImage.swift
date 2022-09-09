@@ -7,14 +7,15 @@ private let kDefaultGIFFrameInterval: TimeInterval = 1.0 / 24.0
 /// to convert the fetch the `Data`
 public struct GIFImage: View {
 
+    private let action: (GIFSource) async throws -> Void
     public let source: GIFSource
-    public let loop: Bool
     public let placeholder: RawImage
     public let errorImage: RawImage?
     public let frameRate: FrameRate
 
     @Environment(\.imageLoader) var imageLoader
     @State private var frame: RawImage?
+    @State public var loop: Bool = true
 
     /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
     /// into frames and stream them based in the "Delay" key packaged on which frame item.
@@ -25,32 +26,38 @@ public struct GIFImage: View {
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
     ///   - frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
+    ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     public init(
         source: GIFSource,
         loop: Bool = true,
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
-        frameRate: FrameRate = .dynamic
+        frameRate: FrameRate = .dynamic,
+        loopAction: @Sendable @escaping (GIFSource) async throws -> Void = { _ in }
     ) {
         self.source = source
-        self.loop = loop
         self.placeholder = placeholder
         self.errorImage = errorImage
         self.frameRate = frameRate
+        self.action = loopAction
+        self.loop = loop
     }
 
     public var body: some View {
         Image.loadImage(with: frame ?? placeholder)
             .resizable()
             .scaledToFit()
-            .task(id: source, self.load)
+            .task(id: source, load)
     }
 
     @Sendable
     private func load() async {
         do {
-            for try await imageFrame in try await imageLoader.load(source: source, loop: loop) {
-                try await update(imageFrame)
+            while(self.loop) {
+                for try await imageFrame in try await imageLoader.load(source: source) {
+                    try await update(imageFrame)
+                }
+                try await action(source)
             }
         } catch {
             frame = errorImage ?? placeholder

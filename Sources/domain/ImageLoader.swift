@@ -19,9 +19,9 @@ public struct ImageLoader {
         self.fileManager = fileManager
     }
 
-    public func load(source: GIFSource, loop: Bool) async throws -> CGImageSourceFrameSequence {
+    public func load(source: GIFSource) async throws -> CGImageSourceFrameSequence {
         let data = try await source.loadData(session: session, cache: cache, fileManager: fileManager)
-        return try data.imageAsyncSequence(loop: loop)
+        return try data.imageAsyncSequence()
     }
 }
 
