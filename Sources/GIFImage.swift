@@ -15,6 +15,7 @@ public struct GIFImage: View {
     @Environment(\.imageLoader) var imageLoader
     @State @MainActor private var frame: RawImage?
     @Binding public var loop: Bool
+    @Binding public var animate: Bool
     @State private var presentationTask: Task<(), Never>? = nil
 
     
@@ -23,6 +24,7 @@ public struct GIFImage: View {
     ///
     /// - Parameters:
     ///   - source: Source of the image. If the source is remote, the response is cached using `URLCache`
+    ///   - animate: A flag to indicate that GIF should animate or not. If non-animated, the first frame will be displayed
     ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
@@ -30,6 +32,7 @@ public struct GIFImage: View {
     ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     public init(
         source: GIFSource,
+        animate: Bool,
         loop: Bool,
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
@@ -38,6 +41,7 @@ public struct GIFImage: View {
     ) {
         self.init(
             source: source,
+            animate: .constant(animate),
             loop: .constant(loop),
             placeholder: placeholder,
             errorImage: errorImage,
@@ -58,6 +62,7 @@ public struct GIFImage: View {
     ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     public init(
         source: GIFSource,
+        animate: Binding<Bool> = Binding.constant(true),
         loop: Binding<Bool> = Binding.constant(true),
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
@@ -65,6 +70,7 @@ public struct GIFImage: View {
         loopAction: @Sendable @escaping (GIFSource) async throws -> Void = { _ in }
     ) {
         self.source = source
+        self._animate = animate
         self._loop = loop
         self.placeholder = placeholder
         self.errorImage = errorImage
@@ -77,25 +83,35 @@ public struct GIFImage: View {
             .resizable()
             .scaledToFit()
             .onChange(of: loop, perform: handle(loop:))
+            .onChange(of: animate, perform: handle(animate:))
             .task(id: source, load)
     }
 
+    private func handle(animate: Bool) {
+        if animate { load() }
+        else { presentationTask?.cancel() }
+    }
+    
     private func handle(loop: Bool) {
         if loop { load() }
     }
     
     @Sendable private func load() {
+        guard animate else { return }
         presentationTask?.cancel()
         presentationTask = Task {
             do {
                 repeat {
                     for try await imageFrame in try await imageLoader.load(source: source) {
                         try await update(imageFrame)
+                        if !animate { break }
                     }
                     try await action(source)
-                } while(self.loop)
+                } while(self.loop && self.animate)
             } catch {
-                await setFrame(errorImage ?? placeholder)
+                if !(error is CancellationError) {
+                    await setFrame(errorImage ?? placeholder)
+                }
             }
         }
     }

@@ -26,15 +26,18 @@ struct ContentView: View {
     ]
     @State var placeholder = UIImage(systemName: "photo.circle.fill")!
     @State var error: UIImage?
+    @State var animate: Bool = true
     @State var loop: Bool = true
 
     var body: some View {
         
         VStack {
+            Toggle("Animate", isOn: $animate).padding([.leading, .trailing])
             Toggle("Loop", isOn: $loop).padding([.leading, .trailing])
             List(items) { item in
                 GIFImage(
                     source: item.source,
+                    animate: $animate,
                     loop: $loop,
                     placeholder: placeholder,
                     errorImage: error,
