@@ -64,6 +64,16 @@ GIFImage.init(
 
 The project has a struct named `ImageLoader` that is responsible for parsing the source into a sequence of frames (later used in the view). This loader has a local cache using `URLCache`. The view will fetch the image loader from the view environment. So, if a different cache limits or file manager wants to be used, the `\.imageLoader` environment key can be used to override the default instance.
 
+## Parameters
+
+- source: Source of the image. If the source is remote, the response is cached using `URLCache`
+- animate: A flag to indicate that GIF should animate or not. If non-animated, the first frame will be displayed. Default: true. It is possible to use a `Binding` to be able to toggle this property.
+- loop: Flag to indicate if the GIF should be played only once or continue to loop. Default: true. It is possible to use a `Binding` to be able to toggle this property.
+- placeholder: Image to be used before the source is loaded
+- errorImage: If the stream fails, this image is used
+- frameRate: Option to control the frame rate of the animation or to use the GIF information about frame rate
+- loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
+
 ## Sample Project
 
 A sample project can be found as a Swift Playground app on [Sample.swiftpm](Sample.swiftpm). This playground app is configured with the GIFImage package as a local dependency for better development/test, to run it on iPad's Playground app, the package reference may need to be updated.
