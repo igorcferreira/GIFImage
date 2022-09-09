@@ -81,12 +81,10 @@ public struct GIFImage: View {
     }
 
     private func handle(loop: Bool) {
-        guard loop else { return }
-        Task { await load() }
+        if loop { load() }
     }
     
-    @Sendable
-    private func load() async {
+    @Sendable private func load() {
         presentationTask?.cancel()
         presentationTask = Task {
             do {
@@ -97,14 +95,13 @@ public struct GIFImage: View {
                     try await action(source)
                 } while(self.loop)
             } catch {
-                frame = errorImage ?? placeholder
+                await setFrame(errorImage ?? placeholder)
             }
         }
     }
 
-    @Sendable
-    private func update(_ imageFrame: ImageFrame) async throws {
-        frame = RawImage.create(with: imageFrame.image)
+    @Sendable private func update(_ imageFrame: ImageFrame) async throws {
+        await setFrame(RawImage.create(with: imageFrame.image))
         let calculatedInterval = imageFrame.interval ?? kDefaultGIFFrameInterval
         let interval: Double
         switch frameRate {
@@ -117,6 +114,11 @@ public struct GIFImage: View {
             interval = imageFrame.interval ?? kDefaultGIFFrameInterval
         }
         try await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000.0))
+    }
+    
+    @MainActor
+    @Sendable private func setFrame(_ frame: RawImage) async {
+        self.frame = frame
     }
 }
 
