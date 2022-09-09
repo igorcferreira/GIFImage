@@ -123,11 +123,11 @@ struct GIFImage_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             GIFImage(url: gifURL, placeholder: placeholder, errorImage: error)
-                .frame(width: 350.0, height: 197.0, alignment: .center)
+                .frame(height: 175.0, alignment: .center)
             GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .limited(fps: 5))
-                .frame(width: 350.0, height: 197.0, alignment: .center)
+                .frame(height: 175.0, alignment: .center)
             GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .static(fps: 30))
-                .frame(width: 350.0, height: 197.0, alignment: .center)
+                .frame(height: 175.0, alignment: .center)
         }
     }
 }
