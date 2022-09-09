@@ -14,6 +14,7 @@ public extension GIFImage {
     ///
     /// - Parameters:
     ///   - url: URL string of the image. If the string cannot be parsed into URL, this constructor early aborts and returns `nil`
+    ///   - animate: A flag to indicate that GIF should animate or not. If non-animated, the first frame will be displayed
     ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
@@ -21,6 +22,7 @@ public extension GIFImage {
     ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     init?(
         url: String,
+        animate: Bool,
         loop: Bool,
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
@@ -29,6 +31,7 @@ public extension GIFImage {
     ) {
         self.init(
             url: url,
+            animate: .constant(animate),
             loop: .constant(loop),
             placeholder: placeholder,
             errorImage: errorImage,
@@ -42,6 +45,7 @@ public extension GIFImage {
     ///
     /// - Parameters:
     ///   - url: URL string of the image. If the string cannot be parsed into URL, this constructor early aborts and returns `nil`
+    ///   - animate: A flag to indicate that GIF should animate or not. If non-animated, the first frame will be displayed
     ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
@@ -49,6 +53,7 @@ public extension GIFImage {
     ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     init?(
         url: String,
+        animate: Binding<Bool> = Binding.constant(true),
         loop: Binding<Bool> = Binding.constant(true),
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
@@ -60,6 +65,7 @@ public extension GIFImage {
         }
         self.init(
             source: GIFSource.remote(url: resolvedURL),
+            animate: animate,
             loop: loop,
             placeholder: placeholder,
             errorImage: errorImage,
@@ -73,6 +79,7 @@ public extension GIFImage {
     ///
     /// - Parameters:
     ///   - url: URL of the image. The response is cached using `URLCache`
+    ///   - animate: A flag to indicate that GIF should animate or not. If non-animated, the first frame will be displayed
     ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
@@ -80,6 +87,7 @@ public extension GIFImage {
     ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     init(
         url: URL,
+        animate: Bool = true,
         loop: Bool = true,
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
@@ -88,6 +96,7 @@ public extension GIFImage {
     ) {
         self.init(
             url: url,
+            animate: .constant(animate),
             loop: .constant(loop),
             placeholder: placeholder,
             errorImage: errorImage,
@@ -101,6 +110,7 @@ public extension GIFImage {
     ///
     /// - Parameters:
     ///   - url: URL of the image. The response is cached using `URLCache`
+    ///   - animate: A flag to indicate that GIF should animate or not. If non-animated, the first frame will be displayed
     ///   - loop: Flag to indicate if the GIF should be played only once or continue to loop
     ///   - placeholder: Image to be used before the source is loaded
     ///   - errorImage: If the stream fails, this image is used
@@ -108,6 +118,7 @@ public extension GIFImage {
     ///   - loopAction: Closure called whenever the GIF finishes rendering one cycle of the action
     init(
         url: URL,
+        animate: Binding<Bool> = Binding.constant(true),
         loop: Binding<Bool> = Binding.constant(true),
         placeholder: RawImage = RawImage(),
         errorImage: RawImage? = nil,
@@ -116,6 +127,7 @@ public extension GIFImage {
     ) {
         self.init(
             source: GIFSource.remote(url: url),
+            animate: animate,
             loop: loop,
             placeholder: placeholder,
             errorImage: errorImage,

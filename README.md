@@ -53,6 +53,7 @@ The view can be configured with a placeholder image placed while the GIF is bein
 ```swift
 GIFImage.init(
     source: GIFSource,
+    animate: Bool = true,
     loop: Bool = true,
     placeholder: RawImage = RawImage(),
     errorImage: RawImage? = nil,
