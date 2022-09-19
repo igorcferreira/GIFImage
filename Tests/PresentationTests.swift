@@ -39,12 +39,13 @@ class PresentationTests: XCTestCase {
     var gifSource: GIFSource {
         .local(filePath: gifPath)
     }
+    let testFPS = 1000
     
     func testNoAnimationAndNoLoop() throws {
         let expectation = expectation(description: "Process holder")
         let frameCounter = Counter()
         
-        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: 1000), animate: .constant(false), loop: .constant(false)) { _ in
+        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: testFPS), animate: .constant(false), loop: .constant(false)) { _ in
             expectation.fulfill()
         }
         Task { await presenter.start(imageLoader: ImageLoader(), fallbackImage: RawImage(), frameUpdate: frameCounter.count(image:)) }
@@ -57,7 +58,7 @@ class PresentationTests: XCTestCase {
         let expectation = expectation(description: "Process holder")
         let frameCounter = Counter()
         
-        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: 1000), animate: .constant(false), loop: .constant(true)) { _ in
+        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: testFPS), animate: .constant(false), loop: .constant(true)) { _ in
             expectation.fulfill()
         }
         Task { await presenter.start(imageLoader: ImageLoader(), fallbackImage: RawImage(), frameUpdate: frameCounter.count(image:)) }
@@ -70,7 +71,7 @@ class PresentationTests: XCTestCase {
         let expectation = expectation(description: "Process holder")
         let frameCounter = Counter()
         
-        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: 1000), animate: .constant(true), loop: .constant(false)) { _ in
+        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: testFPS), animate: .constant(true), loop: .constant(false)) { _ in
             expectation.fulfill()
         }
         Task { await presenter.start(imageLoader: ImageLoader(), fallbackImage: RawImage(), frameUpdate: frameCounter.count(image:)) }
@@ -84,7 +85,7 @@ class PresentationTests: XCTestCase {
         let loopCounter = Counter(triggerLimit: 2) { expectation.fulfill() }
         let frameCounter = Counter()
         
-        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: 1000), animate: .constant(true), loop: .constant(true), action: loopCounter.count(source:))
+        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: testFPS), animate: .constant(true), loop: .constant(true), action: loopCounter.count(source:))
         Task { await presenter.start(imageLoader: ImageLoader(), fallbackImage: RawImage(), frameUpdate: frameCounter.count(image:)) }
         
         wait(for: [expectation], timeout: 1.0)
