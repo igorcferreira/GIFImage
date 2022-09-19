@@ -120,7 +120,6 @@ struct GIFImage_Previews: PreviewProvider {
     static let gifURL = "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif"
     static let placeholder = RawImage.create(symbol: "photo.circle.fill")!
     static let error = RawImage.create(symbol: "xmark.octagon")
-    static var loop = true
     
     static var previews: some View {
         Group {

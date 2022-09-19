@@ -36,7 +36,7 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .center) {
             Toggle("Animate", isOn: $animate).padding([.leading, .trailing, .top])
-            Toggle("Loop", isOn: $loop).padding([.leading, .trailing])
+            Toggle("Loop", isOn: $loop).padding([.leading, .trailing, .bottom])
             List(items) { item in
                 GIFImage(
                     source: item.source,
