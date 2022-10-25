@@ -14,7 +14,7 @@ app:
       is_expand: true
 meta:
   bitrise.io:
-    stack: osx-xcode-13.3.x
+    stack: osx-xcode-14.0.x
 trigger_map:
 - push_branch: main
   workflow: build
@@ -63,7 +63,7 @@ workflows:
         inputs:
         - project_path: $BITRISE_SOURCE_DIR/Package.swift
         - xcpretty_options: --color --report html --output "${BITRISE_DEPLOY_DIR}/xcode-test-results-watchOS.html"
-        - destination: platform=watchOS Simulator,name=Apple Watch Series 7 - 41mm,OS=8.5
+        - destination: platform=watchOS Simulator,name=Apple Watch Series 7 (41mm)
     - xcode-test@4:
         title: tvOS Tests
         inputs:
