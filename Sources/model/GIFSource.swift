@@ -8,7 +8,10 @@
 import Foundation
 
 public enum GIFSource: Equatable {
+    @available(*, deprecated, renamed: "remoteURL(_:)")
     case remote(url: URL)
+    case remoteURL(_ url: URL)
+    case remoteRequest(_ request: URLRequest)
     case local(filePath: String)
     case `static`(data: Data)
 }

@@ -8,7 +8,7 @@
 import Foundation
 import ImageIO
 
-public struct CGImageSourceIterator: AsyncIteratorProtocol {
+public actor CGImageSourceIterator: AsyncIteratorProtocol {
 
     public let frameCount: Int
     public let source: CGImageSource
@@ -20,16 +20,15 @@ public struct CGImageSourceIterator: AsyncIteratorProtocol {
         self.currentFrame = 0
     }
 
-    public mutating func next() async throws -> ImageFrame? {
+    public func next() async throws -> ImageFrame? {
         guard currentFrame < frameCount else {
             return nil
         }
 
-        let frame: ImageFrame?
-        if let image = CGImageSourceCreateImageAtIndex(source, currentFrame, nil) {
-            frame = ImageFrame(image: image, interval: source.intervalAtIndex(currentFrame))
+        let frame: ImageFrame? = if let image = CGImageSourceCreateImageAtIndex(source, currentFrame, nil) {
+            ImageFrame(image: image, interval: source.intervalAtIndex(currentFrame))
         } else {
-            frame = nil
+            nil
         }
         currentFrame += 1
         return frame
