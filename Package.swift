@@ -1,14 +1,15 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.9
 
 import PackageDescription
 
 let package = Package(
     name: "GIFImage",
     platforms: [
-        .macOS("12.0"),
-        .iOS("15.0"),
-        .tvOS("15.0"),
-        .watchOS("8.0")
+        .macOS(.v14),
+        .iOS(.v17),
+        .tvOS(.v17),
+        .watchOS(.v10),
+        .visionOS(.v1)
     ],
     products: [
         .library(

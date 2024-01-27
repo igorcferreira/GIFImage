@@ -84,8 +84,12 @@ public struct GIFImage: View {
         Image.loadImage(with: frame ?? placeholder)
             .resizable()
             .scaledToFit()
-            .onChange(of: loop, perform: handle(loop:))
-            .onChange(of: animate, perform: handle(animate:))
+            .onChange(of: loop) { _, newValue in
+                handle(loop: newValue)
+            }
+            .onChange(of: animate) { _, newValue in
+                handle(animate: newValue)
+            }
             .task(id: source, load)
     }
 
@@ -116,19 +120,18 @@ public struct GIFImage: View {
     }
 }
 
-struct GIFImage_Previews: PreviewProvider {
-    static let gifURL = "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif"
-    static let placeholder = RawImage.create(symbol: "photo.circle.fill")!
-    static let error = RawImage.create(symbol: "xmark.octagon")
-    
-    static var previews: some View {
-        Group {
-            GIFImage(url: gifURL, placeholder: placeholder, errorImage: error)
-                .frame(height: 175.0, alignment: .center)
-            GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .limited(fps: 5))
-                .frame(height: 175.0, alignment: .center)
-            GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .static(fps: 30))
-                .frame(height: 175.0, alignment: .center)
-        }
-    }
+#if DEBUG
+let placeholder = RawImage.create(symbol: "photo.circle.fill")!
+let error = RawImage.create(symbol: "xmark.octagon")
+let gifURL = "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif"
+#Preview("Raw URL") {
+    GIFImage(url: gifURL, placeholder: placeholder, errorImage: error)
 }
+#Preview("Limited 5 FPS") {
+    GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .limited(fps: 5))
+}
+#Preview("Limited to 30 FPS") {
+    GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .static(fps: 30))
+}
+#endif
+
