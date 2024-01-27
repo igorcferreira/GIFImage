@@ -8,7 +8,7 @@
 import Foundation
 import ImageIO
 
-public struct CGImageSourceFrameSequence: AsyncSequence {
+public actor CGImageSourceFrameSequence: AsyncSequence {
     public typealias Element = ImageFrame
 
     public enum LoadError: Error {
@@ -40,7 +40,7 @@ public struct CGImageSourceFrameSequence: AsyncSequence {
         self.source = source
     }
 
-    public func makeAsyncIterator() -> CGImageSourceIterator {
+    nonisolated public func makeAsyncIterator() -> CGImageSourceIterator {
         CGImageSourceIterator(source: source)
     }
 }

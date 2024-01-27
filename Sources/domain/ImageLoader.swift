@@ -28,9 +28,10 @@ public struct ImageLoader {
 private extension GIFSource {
     func loadData(session: URLSession, cache: URLCache, fileManager: FileManager) async throws -> Data {
         switch self {
-        case .static(let data): return data
-        case .remote(let url): return try await url.loadData(session: session, cache: cache)
-        case .local(let filePath): return try await filePath.loadData(fileManager: fileManager)
+        case let .static(data): data
+        case .remote(let url), .remoteURL(let url): try await url.loadData(session: session, cache: cache)
+        case let .remoteRequest(request): try await request.loadData(session: session, cache: cache)
+        case let .local(filePath): try await filePath.loadData(fileManager: fileManager)
         }
     }
 }
@@ -50,18 +51,24 @@ private extension String {
 private extension URL {
     func loadData(session: URLSession, cache: URLCache) async throws -> Data {
         let request = URLRequest(url: self)
-        if let cache = cache.cachedResponse(for: request) {
+        return try await request.loadData(session: session, cache: cache)
+    }
+}
+
+private extension URLRequest {
+    func loadData(session: URLSession, cache: URLCache) async throws -> Data {
+        if let cache = cache.cachedResponse(for: self) {
             return cache.data
         }
 
-        let (data, response) = try await session.data(for: request)
+        let (data, response) = try await session.data(for: self)
         guard let httpResponse = response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)
         }
         guard httpResponse.isSuccess else {
             throw URLError(.init(rawValue: httpResponse.statusCode))
         }
-        cache.storeCachedResponse(CachedURLResponse(response: response, data: data), for: request)
+        cache.storeCachedResponse(CachedURLResponse(response: response, data: data), for: self)
         return data
     }
 }

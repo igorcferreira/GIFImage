@@ -19,3 +19,10 @@ extension EnvironmentValues {
         set { self[GIFImageEnvironment.self] = newValue }
     }
 }
+
+extension View {
+    @ViewBuilder
+    func with(imageLoader: ImageLoader) -> some View {
+        environment(\.imageLoader, imageLoader)
+    }
+}
