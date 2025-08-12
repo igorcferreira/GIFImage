@@ -3,7 +3,7 @@ import SwiftUI
 /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
 /// into frames and stream them based in the "Delay" key packaged on which frame item. The view will use the `ImageLoader` from the environment
 /// to convert the fetch the `Data`
-public struct GIFImage: View {
+public struct GIFImage: View, @unchecked Sendable {
     public let source: GIFSource
     public let placeholder: RawImage
     public let errorImage: RawImage?
@@ -90,7 +90,7 @@ public struct GIFImage: View {
             .onChange(of: animate) { _, newValue in
                 handle(animate: newValue)
             }
-            .task(id: source, load)
+            .task(id: source) { await load() }
     }
     
     private func handle(animate: Bool) {
@@ -110,7 +110,7 @@ public struct GIFImage: View {
         updatePresentation(task: Task { await presentationController.start(
             imageLoader: imageLoader,
             fallbackImage: fallback,
-            frameUpdate: setFrame(_:)
+            frameUpdate: { frame in await setFrame(frame) }
         )})
     }
     
@@ -122,10 +122,12 @@ public struct GIFImage: View {
     }
     
     @MainActor
-    @Sendable private func setFrame(_ frame: RawImage) async {
+    private func setFrame(_ frame: RawImage) async {
         self.frame = frame
     }
 }
+
+extension RawImage: @retroactive @unchecked Sendable {}
 
 #if DEBUG
 @MainActor let placeholder = RawImage.create(symbol: "photo.circle.fill")!
