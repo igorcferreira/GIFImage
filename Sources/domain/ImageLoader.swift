@@ -8,7 +8,7 @@
 import Foundation
 
 /// Object responsible to load a `GIFSource` into a `ImageFrame` stream.
-public struct ImageLoader : @unchecked Sendable {
+public struct ImageLoader: @unchecked Sendable {
     public let session: URLSession
     public let cache: URLCache
     public let fileManager: FileManager

@@ -8,7 +8,7 @@
 import ImageIO
 import Foundation
 
-public struct ImageFrame : Sendable {
+public struct ImageFrame: Sendable {
     public let image: CGImage
     public let interval: TimeInterval?
 }

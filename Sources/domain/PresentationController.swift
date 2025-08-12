@@ -10,7 +10,7 @@ import SwiftUI
 
 private let kDefaultGIFFrameInterval: TimeInterval = 1.0 / 24.0
 
-struct PresentationController : Sendable {
+struct PresentationController: Sendable {
     let source: GIFSource
     let frameRate: FrameRate
     let action: @Sendable (GIFSource) async throws -> Void
