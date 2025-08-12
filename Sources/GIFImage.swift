@@ -105,6 +105,7 @@ public struct GIFImage: View {
         if loop { Task { await load() }}
     }
     
+    @Sendable
     private func load() async {
         let fallback = errorImage ?? placeholder
         updatePresentation(task: Task { await presentationController.start(
@@ -122,7 +123,7 @@ public struct GIFImage: View {
     }
     
     @MainActor
-    @Sendable private func setFrame(_ frame: RawImage) async {
+    private func setFrame(_ frame: RawImage) async {
         self.frame = frame
     }
 }
