@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ImageIO
+@preconcurrency import ImageIO
 
 public actor CGImageSourceFrameSequence: AsyncSequence {
     public typealias Element = ImageFrame

@@ -10,10 +10,10 @@ import SwiftUI
 
 private let kDefaultGIFFrameInterval: TimeInterval = 1.0 / 24.0
 
-struct PresentationController {
+struct PresentationController : Sendable {
     let source: GIFSource
     let frameRate: FrameRate
-    let action: (GIFSource) async throws -> Void
+    let action: @Sendable (GIFSource) async throws -> Void
     @Binding var animate: Bool
     @Binding var loop: Bool
     
@@ -31,7 +31,7 @@ struct PresentationController {
         self._loop = loop
     }
     
-    func start(imageLoader: ImageLoader, fallbackImage: RawImage, frameUpdate: (RawImage) async -> Void) async {
+    func start(imageLoader: ImageLoader, fallbackImage: RawImage, frameUpdate: @Sendable (RawImage) async -> Void) async {
         do {
             repeat {
                 for try await imageFrame in try await imageLoader.load(source: source) {

@@ -105,11 +105,11 @@ public struct GIFImage: View {
         if loop { Task { await load() }}
     }
     
-    @Sendable
-    nonisolated private func load() async {
-        await updatePresentation(task: Task { await presentationController.start(
+    private func load() async {
+        let fallback = errorImage ?? placeholder
+        updatePresentation(task: Task { await presentationController.start(
             imageLoader: imageLoader,
-            fallbackImage: errorImage ?? placeholder,
+            fallbackImage: fallback,
             frameUpdate: setFrame(_:)
         )})
     }
@@ -128,9 +128,10 @@ public struct GIFImage: View {
 }
 
 #if DEBUG
-let placeholder = RawImage.create(symbol: "photo.circle.fill")!
-let error = RawImage.create(symbol: "xmark.octagon")
-let gifURL = "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif"
+@MainActor let placeholder = RawImage.create(symbol: "photo.circle.fill")!
+@MainActor let error = RawImage.create(symbol: "xmark.octagon")
+@MainActor let gifURL = "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif"
+
 #Preview("Raw URL") {
     GIFImage(url: gifURL, placeholder: placeholder, errorImage: error)
 }

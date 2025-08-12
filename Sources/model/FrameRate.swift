@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum FrameRate {
+public enum FrameRate : Sendable {
     case dynamic
     case limited(fps: Int)
     case `static`(fps: Int)

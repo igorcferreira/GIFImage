@@ -9,7 +9,7 @@ import Foundation
 
 final class MockedURLProtocol: URLProtocol {
 
-    private static var results = [URL: Result<Data, URLError>]()
+    nonisolated(unsafe) private static var results = [URL: Result<Data, URLError>]()
 
     static func register(_ result: Result<Data, URLError>, to url: URL) {
         results[url] = result

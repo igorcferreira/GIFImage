@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GIFImageEnvironment: EnvironmentKey {
-    static var defaultValue: ImageLoader = {
+    static let defaultValue: ImageLoader = {
         return ImageLoader()
     }()
 }

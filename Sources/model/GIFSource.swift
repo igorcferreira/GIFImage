@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum GIFSource: Equatable {
+public enum GIFSource: Equatable, Sendable {
     @available(*, deprecated, renamed: "remoteURL(_:)")
     case remote(url: URL)
     case remoteURL(_ url: URL)

@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 @testable import GIFImage
 
-private class Counter {
+private class Counter : @unchecked Sendable {
     var ticks: Int
     let triggerLimit: Int?
     let triggerAction: () -> Void

@@ -105,12 +105,14 @@ class ImageLoaderTests: XCTestCase {
         let fileManager = MockedFileManager()
 
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
-
+        let data = gifData
+        let maxCount = testGIFFrameCount
+        
         measure {
             Task {
-                let sequence = try await imageLoader.load(source: GIFSource.static(data: gifData))
+                let sequence = try await imageLoader.load(source: GIFSource.static(data: data))
                 let frameCount = try await sequence.reduce(0) { partial, _ in partial + 1 }
-                XCTAssertEqual(frameCount, testGIFFrameCount)
+                XCTAssertEqual(frameCount, maxCount)
             }
         }
     }
