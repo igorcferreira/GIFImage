@@ -16,7 +16,7 @@ public actor CGImageSourceFrameSequence: AsyncSequence {
         case emptyData
     }
 
-    public let source: CGImageSource
+    public nonisolated let source: CGImageSource
 
     public init(data: Data) throws {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {

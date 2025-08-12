@@ -8,13 +8,13 @@ public struct GIFImage: View {
     public let placeholder: RawImage
     public let errorImage: RawImage?
     private let presentationController: PresentationController
-
+    
     @Environment(\.imageLoader) var imageLoader
     @State @MainActor private var frame: RawImage?
     @Binding public var loop: Bool
     @Binding public var animate: Bool
     @State private var presentationTask: Task<(), Never>?
-
+    
     /// `GIFImage` is a `View` that loads a `Data` object from a source into `CoreImage.CGImageSource`, parse the image source
     /// into frames and stream them based in the "Delay" key packaged on which frame item.
     ///
@@ -79,7 +79,7 @@ public struct GIFImage: View {
             action: loopAction
         )
     }
-
+    
     public var body: some View {
         Image.loadImage(with: frame ?? placeholder)
             .resizable()
@@ -92,26 +92,33 @@ public struct GIFImage: View {
             }
             .task(id: source, load)
     }
-
+    
     private func handle(animate: Bool) {
         if animate {
-            load()
+            Task { await load() }
         } else {
             presentationTask?.cancel()
         }
     }
     
     private func handle(loop: Bool) {
-        if loop { load() }
+        if loop { Task { await load() }}
     }
     
-    @Sendable private func load() {
-        presentationTask?.cancel()
-        presentationTask = Task { await presentationController.start(
+    @Sendable
+    nonisolated private func load() async {
+        await updatePresentation(task: Task { await presentationController.start(
             imageLoader: imageLoader,
             fallbackImage: errorImage ?? placeholder,
             frameUpdate: setFrame(_:)
-        )}
+        )})
+    }
+    
+    private func updatePresentation(
+        task: Task<(), Never>?
+    ) {
+        presentationTask?.cancel()
+        presentationTask = task
     }
     
     @MainActor

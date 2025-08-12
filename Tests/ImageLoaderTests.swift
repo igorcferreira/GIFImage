@@ -56,7 +56,7 @@ class ImageLoaderTests: XCTestCase {
         MockedURLProtocol.register(.failure(thrownError), to: url)
 
         do {
-            _ = try await imageLoader.load(source: GIFSource.remote(url: url))
+            _ = try await imageLoader.load(source: GIFSource.remoteURL(url))
             XCTFail("Sequence should throw error")
         } catch {
             XCTAssertEqual((error as? URLError)?.code, thrownError.code)
@@ -93,7 +93,7 @@ class ImageLoaderTests: XCTestCase {
         MockedURLProtocol.register(.success(gifData), to: url)
 
         let imageLoader = ImageLoader(session: urlSession, cache: .shared, fileManager: fileManager)
-        let sequence = try await imageLoader.load(source: GIFSource.remote(url: url))
+        let sequence = try await imageLoader.load(source: GIFSource.remoteURL(url))
 
         let (frameCount, duration) = try await sequence.reduce((0, 0.0)) { partial, frame in (partial.0 + 1, partial.1 + (frame.interval ?? 0.0)) }
         XCTAssertEqual(frameCount, testGIFFrameCount)

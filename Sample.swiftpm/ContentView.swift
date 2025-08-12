@@ -28,15 +28,17 @@ struct ContentView: View {
 
     init(items: [GIFSource]? = nil) {
         self.items = items?.map { ListItem($0) } ?? [
-            ListItem(.remote(url: URL(string: "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif")!)),
+            ListItem(.remoteURL(URL(string: "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif")!)),
             ListItem(.local(filePath: Bundle.main.path(forResource: "test", ofType: "gif")!))
         ]
     }
     
     var body: some View {
         VStack(alignment: .center) {
-            Toggle("Animate", isOn: $animate).padding([.leading, .trailing, .top])
-            Toggle("Loop", isOn: $loop).padding([.leading, .trailing, .bottom])
+            Toggle("Animate", isOn: $animate)
+                .padding([.leading, .trailing, .top])
+            Toggle("Loop", isOn: $loop)
+                .padding([.leading, .trailing, .bottom])
             List(items) { item in
                 GIFImage(
                     source: item.source,
@@ -51,8 +53,8 @@ struct ContentView: View {
         }
     }
     
-    @MainActor
-    @Sendable private func loopAction(source: GIFSource) async {
+    @Sendable
+    nonisolated private func loopAction(source: GIFSource) async {
         print("Loop for source: \(source)")
     }
 }

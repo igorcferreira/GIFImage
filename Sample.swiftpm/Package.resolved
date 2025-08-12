@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "gifimage",
+      "kind" : "localSourceControl",
+      "location" : "/Users/igor/Developer/GIFImage",
+      "state" : {
+        "revision" : "a49be72485fa4cf6ddf9da3a8b6b4efd3f8e97f8",
+        "version" : "1.1.2"
+      }
+    }
+  ],
+  "version" : 2
+}
