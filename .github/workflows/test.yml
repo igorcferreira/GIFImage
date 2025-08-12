@@ -1,0 +1,17 @@
+name: Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Link SwiftLint or install it
+        run: brew link --overwrite swiftlint || brew install swiftlint
+      - name: Run swiftlint
+        run: swiftlint
+      - name: Run test
+        run: swift test
