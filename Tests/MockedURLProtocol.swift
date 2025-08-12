@@ -32,11 +32,13 @@ final class MockedURLProtocol: URLProtocol {
     }
 
     // When this protocol is active, it intercepts all requests.
+    // swiftlint:disable static_over_final_class
     override class func canInit(with request: URLRequest) -> Bool { true }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
+    // swiftlint:enable static_over_final_class
 
     override func startLoading() {
         guard let url = self.request.url, let result = MockedURLProtocol.results[url] else {

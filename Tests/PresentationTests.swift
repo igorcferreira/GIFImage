@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 @testable import GIFImage
 
-fileprivate class Counter {
+private class Counter {
     var ticks: Int
     let triggerLimit: Int?
     let triggerAction: () -> Void
@@ -45,9 +45,13 @@ class PresentationTests: XCTestCase {
         let expectation = expectation(description: "Process holder")
         let frameCounter = Counter()
         
-        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: testFPS), animate: .constant(false), loop: .constant(false)) { _ in
-            expectation.fulfill()
-        }
+        let presenter = PresentationController(
+            source: gifSource,
+            frameRate: .static(fps: testFPS),
+            animate: .constant(false),
+            loop: .constant(false)) { _ in
+                expectation.fulfill()
+            }
         Task { await presenter.start(imageLoader: ImageLoader(), fallbackImage: RawImage(), frameUpdate: frameCounter.count(image:)) }
         
         wait(for: [expectation], timeout: 1.0)
@@ -58,10 +62,21 @@ class PresentationTests: XCTestCase {
         let expectation = expectation(description: "Process holder")
         let frameCounter = Counter()
         
-        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: testFPS), animate: .constant(false), loop: .constant(true)) { _ in
+        let presenter = PresentationController(
+            source: gifSource,
+            frameRate: .static(fps: testFPS),
+            animate: .constant(false),
+            loop: .constant(true)
+        ) { _ in
             expectation.fulfill()
         }
-        Task { await presenter.start(imageLoader: ImageLoader(), fallbackImage: RawImage(), frameUpdate: frameCounter.count(image:)) }
+        Task {
+            await presenter.start(
+                imageLoader: ImageLoader(),
+                fallbackImage: RawImage(),
+                frameUpdate: frameCounter.count(image:)
+            )
+        }
         
         wait(for: [expectation], timeout: 1.0)
         XCTAssertEqual(1, frameCounter.ticks, "Given it is not animated, the frame should be called only once")
@@ -71,10 +86,20 @@ class PresentationTests: XCTestCase {
         let expectation = expectation(description: "Process holder")
         let frameCounter = Counter()
         
-        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: testFPS), animate: .constant(true), loop: .constant(false)) { _ in
-            expectation.fulfill()
+        let presenter = PresentationController(
+            source: gifSource,
+            frameRate: .static(fps: testFPS),
+            animate: .constant(true),
+            loop: .constant(false)) { _ in
+                expectation.fulfill()
+            }
+        Task {
+            await presenter.start(
+                imageLoader: ImageLoader(),
+                fallbackImage: RawImage(),
+                frameUpdate: frameCounter.count(image:)
+            )
         }
-        Task { await presenter.start(imageLoader: ImageLoader(), fallbackImage: RawImage(), frameUpdate: frameCounter.count(image:)) }
         
         wait(for: [expectation], timeout: 1.0)
         XCTAssertEqual(19, frameCounter.ticks, "When animated, all 19 frames of the test GIF should be displayed once")
@@ -85,8 +110,20 @@ class PresentationTests: XCTestCase {
         let loopCounter = Counter(triggerLimit: 2) { expectation.fulfill() }
         let frameCounter = Counter()
         
-        let presenter = PresentationController(source: gifSource, frameRate: .static(fps: testFPS), animate: .constant(true), loop: .constant(true), action: loopCounter.count(source:))
-        Task { await presenter.start(imageLoader: ImageLoader(), fallbackImage: RawImage(), frameUpdate: frameCounter.count(image:)) }
+        let presenter = PresentationController(
+            source: gifSource,
+            frameRate: .static(fps: testFPS),
+            animate: .constant(true),
+            loop: .constant(true),
+            action: loopCounter.count(source:)
+        )
+        Task {
+            await presenter.start(
+                imageLoader: ImageLoader(),
+                fallbackImage: RawImage(),
+                frameUpdate: frameCounter.count(image:)
+            )
+        }
         
         wait(for: [expectation], timeout: 1.0)
         XCTAssertEqual(38, frameCounter.ticks, "When animated, all 38 frames of the test GIF should be displayed once")

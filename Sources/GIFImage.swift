@@ -141,4 +141,3 @@ let gifURL = "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Test
     GIFImage(url: gifURL, placeholder: placeholder, errorImage: error, frameRate: .static(fps: 30))
 }
 #endif
-
