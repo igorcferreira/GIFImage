@@ -28,29 +28,61 @@ struct ContentView: View {
 
     init(items: [GIFSource]? = nil) {
         self.items = items?.map { ListItem($0) } ?? [
-            ListItem(.remoteURL(URL(string: "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif")!)),
-            ListItem(.local(filePath: Bundle.main.path(forResource: "test", ofType: "gif")!))
+            ListItem(.remoteURL(URL(
+                string: "https://raw.githubusercontent.com/igorcferreira/GIFImage/main/Tests/test.gif")!
+            )),
+            ListItem(.local(
+                filePath: Bundle.main.path(forResource: "test", ofType: "gif")!
+            ))
         ]
     }
     
     var body: some View {
         VStack(alignment: .center) {
             Toggle("Animate", isOn: $animate)
-                .padding([.leading, .trailing, .top])
+                .padding(.horizontal)
             Toggle("Loop", isOn: $loop)
-                .padding([.leading, .trailing, .bottom])
-            List(items) { item in
-                GIFImage(
-                    source: item.source,
-                    animate: $animate,
-                    loop: $loop,
-                    placeholder: placeholder,
-                    errorImage: error,
-                    frameRate: .dynamic,
-                    loopAction: loopAction(source:)
-                ).frame(height: 175.0, alignment: .center)
+                .padding(.horizontal)
+            adaptedList {
+                ForEach(items) { item in
+                    if #available(iOS 26.0, *) {
+                        cell(item: item)
+                            .glassEffect(in: .rect(cornerRadius: 8.0))
+                            .id(item.id)
+                    } else {
+                        cell(item: item)
+                            .id(item.id)
+                    }
+                }
+            }
+            .background(.secondary.opacity(0.8))
+        }
+    }
+    
+    @ViewBuilder
+    func adaptedList(
+        @ViewBuilder body: () -> some View
+    ) -> some View {
+        ScrollView {
+            LazyVStack {
+                body().padding(.top)
             }
         }
+    }
+    
+    @ViewBuilder
+    func cell(item: ListItem) -> some View {
+        GIFImage(
+            source: item.source,
+            animate: $animate,
+            loop: $loop,
+            placeholder: placeholder,
+            errorImage: error,
+            frameRate: .dynamic,
+            loopAction: loopAction(source:)
+        )
+        .frame(height: 200.0)
+        .clipShape(.rect(cornerRadius: 8.0))
     }
     
     @Sendable
@@ -59,13 +91,9 @@ struct ContentView: View {
     }
 }
 
-struct ContentViewPreviews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            ContentView()
-                .environment(\.locale, .init(identifier: "en"))
-            ContentView()
-                .environment(\.locale, .init(identifier: "pt"))
-        }
-    }
+#Preview {
+    ContentView()
+        .environment(\.locale, .init(identifier: "en"))
+    ContentView()
+        .environment(\.locale, .init(identifier: "pt"))
 }
